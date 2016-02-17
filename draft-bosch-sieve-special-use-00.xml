@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+
+<!DOCTYPE rfc SYSTEM "rfc2629.dtd">
+
+<?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
+<!-- used by XSLT processors -->
+<?rfc strict="yes" ?>
+<?rfc toc="yes"?>
+<?rfc tocdepth="4"?>
+<?rfc symrefs="yes"?>
+<?rfc sortrefs="yes" ?>
+<?rfc compact="yes" ?>
+<?rfc subcompact="no" ?>
+
+<rfc category="std" docName="draft-bosch-sieve-special-use-00" ipr="trust200902">
+<!-- ***** FRONT MATTER ***** -->
+
+<front>
+<title abbrev="Sieve: Special-Use Mailboxes">
+Sieve Email Filtering: Delivering to Special-Use Mailboxes
+</title>
+
+<author fullname="Stephan Bosch" initials="S." surname="Bosch">
+  <organization/>
+  <address>
+    <postal>
+      <street></street>
+      <city>Enschede</city>
+      <country>NL</country>
+    </postal>
+    <email>stephan@rename-it.nl</email>
+  </address>
+</author>
+
+<date/>
+
+<area>General</area>
+<!--<workgroup>Sieve Working Group</workgroup>-->
+<keyword>sieve</keyword>
+<keyword>mailbox</keyword>
+<keyword>special-use</keyword>
+
+<abstract>
+<t></t>
+</abstract>
+</front>
+
+<middle>
+
+<section title="Introduction">
+<t>This is an extension to the Sieve filtering language defined by
+<xref target="SIEVE">RFC 5228</xref>. [FIXME]</t>
+</section>
+
+<section title="Conventions Used in This Document">
+<t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+"SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+document are to be interpreted as described in <xref target="KEYWORDS"/>.</t>
+<t>Conventions for notations are as in <xref target="SIEVE"/> Section 1.1,
+including use of the "Usage:" label for the definition of action and tagged
+arguments syntax.</t>
+</section>
+
+<section title="Test &quot;specialuse_exists&quot;">
+
+<?rfc needLines="3" ?>
+<figure>
+<artwork><![CDATA[
+Usage:  specialuse_exists [<mailbox: string>]
+                          <special-use-flags: string-list>
+]]></artwork>
+</figure>
+
+<t>If the "mailbox" string argument is omitted, the "specialuse_exists" test
+yields true if for each of the special-use flags listed in the
+"special-use-flags" argument:
+<list style="letters">
+<t>at least one mailbox exists in the mail store that has that particular
+special-use flag assigned, and</t>
+<t>that mailbox allows the user in whose context the Sieve script runs to
+"deliver" messages into it.</t>
+</list>
+</t>
+
+<t>If the "mailbox" argument is specified, the "specialuse_exists" test yields
+true if:
+<list style="letters">
+<t>the indicated mailbox exists, </t>
+<t>that mailbox allows the user in whose context the Sieve script runs
+to "deliver" messages into it, and</t>
+<t>that mailbox has all of the special-use flags listed in the
+"special-use-flags" argument assigned to it.</t>
+</list>
+</t>
+
+<t>Refer to the specification of the "mailboxexists" test in Section 3.1 of
+<xref target="MAILBOX">RFC 5490</xref> for a definition of when "delivery"
+of messages into a mailbox is deemed possible.</t>
+
+</section>
+
+<section title="&quot;:specialuse&quot; Argument to &quot;fileinto&quot; Command">
+
+<?rfc needLines="3" ?>
+<figure>
+<artwork><![CDATA[
+Usage:  fileinto [:specialuse <special-use-flag: string>]
+                 <mailbox: string>
+]]></artwork>
+</figure>
+
+<t>Normally, the "fileinto" command delivers the message in the mailbox
+specified using its positional mailbox argument. However, if the optional
+":specialuse" argument is also specified, the "fileinto" command first checks
+whether a mailbox exists with the specified special-use flag assigned to it.
+If that is the case, that special-use mailbox is used for delivery instead. If
+there is no such mailbox or if the specified special-use flag is unknown to the
+implementation in general, the "fileinto" action proceeds as it would without
+the ":specialuse" argument.</t>
+
+<t>Summarizing, if the ":specialuse" argument is specified, the fileinto
+command deals with two mailboxes that may or may not exist:
+<list style="symbols">
+<t>An anonymous special-use mailbox, which has at least the special-use flag
+specified with the ":specialuse" argument assigned to it.</t>
+<t>The default mailbox named by the positional string argument of the
+"fileinto" command, which is used when the special-use mailbox is not found.
+</t>
+</list>
+</t>
+
+<t>The special-use flag specified with the ":specialuse" argument MUST conform
+to the "use-attr" syntax described in Section (FIXME) of [RFC6154] (FIXME).
+Implementations SHOULD handle an invalid special-use flag in the same way as an
+invalid mailbox name is handled. The string parameter of the ":specialuse"
+argument is not a constant string, which means that variable substitutions are
+allowed when the <xref target="VARIABLES">"variables" extension</xref> is
+active. In that case, the syntax of the special-use flag is only verified at
+runtime.</t>
+
+<t>If neither the special-use mailbox nor the default mailbox exists, the 
+"fileinto" action MUST proceed exactly as it does in case the ":specialuse"
+is argument is absent and the mailbox named by its positional argument does
+not exist. The various options for handling this situation are described in
+Section 4.1 of <xref target="SIEVE">RFC5228</xref>.</t>
+
+<t>More than one mailbox can have a particular special-use flag assigned. In
+that case, the mailbox that is chosen for delivery is implementation-defined.
+However, implementations MUST ensure that this choice is made consistently,
+so that the same mailbox is used every time.</t>
+
+<t>If delivery to the special-use mailbox fails for reasons not relating to its
+existence, the Sieve interpreter MUST NOT subsequently attempt delivery in
+the indicated default mailbox as a fallback. Instead, it MUST proceed exactly
+as it does in case the ":specialuse" argument is absent and delivery to the
+mailbox named by its positional argument fails. This prevents the situation
+where messages are unexpectedly spread over two mailboxes in case transient or
+intermittent delivery failures occur.</t>
+
+<section title="Interaction with &quot;:create&quot; Argument to &quot;fileinto&quot; Command">
+
+<t>The <xref target="MAILBOX">"mailbox" extension</xref> adds the optional
+":create" argument to the "fileinto" command. If the optional ":create" argument
+is specified with "fileinto", it instructs the Sieve interpreter to create the
+specified mailbox if needed, before attempting to deliver the message into the
+specified mailbox.</t>
+
+<t>When combined with the ":specialuse" argument, the ":create" argument
+instructs the Sieve interpreter to create the specified default mailbox if
+needed. This need arises when both the special-use and the default mailbox are
+not found.</t>
+
+<t>If the server implementation supports the CREATE-SPECIAL-USE capability for
+IMAP [FIXME], i.e. it allows assigning special-use flags to new mailboxes, it
+SHOULD assign the special-use flag specified with the ":specialuse" argument
+to the newly created mailbox.</t> 
+
+</section>
+</section>
+
+<section title="Sieve Capability Strings">
+<t>A Sieve implementation that defines the "specialuse_exists" test and
+the ":specialuse" argument for the "fileinto" command  will advertise the
+capability string "special-use".
+</t>
+</section>
+
+<section title="Examples">
+<t>[FIXME]</t>
+</section>
+
+<section anchor="Security" title="Security Considerations">
+<t>[FIXME]</t>
+<t>Additional security considerations are discussed in
+<xref target="SIEVE"/>.</t>
+</section>
+
+<section anchor="IANA" title="IANA Considerations">
+
+<t>The following template specifies the IANA registration of the Sieve
+extension specified in this document:</t>
+
+<?rfc needLines="13" ?>
+<figure>
+<artwork><![CDATA[
+   To: iana@iana.org
+   Subject: Registration of new Sieve extension
+
+   Capability name: special-use
+   Description:     
+   RFC number:      this RFC
+   Contact address: Sieve mailing list <sieve@ietf.org>
+]]></artwork>
+</figure>
+
+<t>This information should be added to the list of sieve extensions
+given on http://www.iana.org/assignments/sieve-extensions.</t>
+</section>
+</middle>
+
+<!--  *****BACK MATTER ***** -->
+
+<back>
+<!-- References split into informative and normative -->
+
+<references title="Normative References">
+  <reference anchor='KEYWORDS'>
+    <front>
+    <title abbrev='RFC Key Words'>Key words for use in RFCs to Indicate Requirement Levels</title>
+    <author initials='S.' surname='Bradner' fullname='Scott Bradner'>
+    <organization>Harvard University</organization>
+    <address>
+      <postal>
+        <street>1350 Mass. Ave.</street>
+        <street>Cambridge</street>
+        <street>MA 02138</street>
+      </postal>
+      <phone>- +1 617 495 3864</phone>
+      <email>sob@harvard.edu</email>
+    </address>
+    </author>
+    <date year='1997' month='March' />
+    <area>General</area>
+    <keyword>keyword</keyword>
+    <abstract>
+      <t>In many standards track documents several words are used to signify
+      the requirements in the specification.  These words are often
+      capitalized.  This document defines these words as they should be
+      interpreted in IETF documents.  Authors who follow these guidelines
+      should incorporate this phrase near the beginning of their document:
+
+      <list>
+      <t>
+        The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL
+        NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED",  "MAY", and
+        "OPTIONAL" in this document are to be interpreted as described in
+        RFC 2119.
+      </t>
+      </list></t>
+      <t>Note that the force of these words is modified by the requirement
+      level of the document in which they are used.
+      </t>
+    </abstract></front>
+
+    <seriesInfo name='BCP' value='14' />
+    <seriesInfo name='RFC' value='2119' />
+    <format type='TXT' octets='4723' target='http://www.rfc-editor.org/rfc/rfc2119.txt' />
+    <format type='HTML' octets='17491' target='http://xml.resource.org/public/rfc/html/rfc2119.html' />
+    <format type='XML' octets='5777' target='http://xml.resource.org/public/rfc/xml/rfc2119.xml' />
+  </reference>
+
+  <reference anchor='MAILBOX'>
+    <front>
+    <title>The Sieve Mail-Filtering Language -- Extensions for Checking Mailbox Status and Accessing Mailbox Metadata</title>
+    <author initials='A.' surname='Melnikov' fullname='A. Melnikov'>
+    <organization /></author>
+    <date year='2009' month='March' />
+    <abstract>
+      <t>This memo defines an extension to the Sieve mail filtering language (RFC 5228) for accessing mailbox and server
+      annotations, checking for mailbox existence, and controlling mailbox creation on "fileinto" action. [STANDARDS-TRACK]</t>
+    </abstract>
+    </front>
+
+    <seriesInfo name='RFC' value='5490' />
+    <format type='TXT' octets='16065' target='http://www.rfc-editor.org/rfc/rfc5490.txt' />
+  </reference>
+
+  <reference anchor='SIEVE'>
+    <front>
+    <title>Sieve: An Email Filtering Language</title>
+    <author initials='P.' surname='Guenther' fullname='P. Guenther'>
+    <organization /></author>
+    <author initials='T.' surname='Showalter' fullname='T. Showalter'>
+    <organization /></author>
+    <date year='2008' month='January' />
+    <abstract>
+      <t>This document describes a language for filtering email messages at time of final delivery.
+      It is designed to be implementable on either a mail client or mail server. It is meant to
+      be extensible, simple, and independent of access protocol, mail architecture, and operating
+      system.  It is suitable for running on a mail server where users may not be allowed to
+      execute arbitrary programs, such as on black box Internet Message Access Protocol (IMAP)
+      servers, as the base language has no variables, loops, or ability to shell out to external
+      programs. [STANDARDS-TRACK]</t>
+    </abstract>
+    </front>
+    <seriesInfo name='RFC' value='5228' />
+    <format type='TXT' octets='87531' target='http://www.rfc-editor.org/rfc/rfc5228.txt' />
+  </reference>  
+
+  <reference anchor='VARIABLES'>
+    <front>
+    <title>Sieve Email Filtering: Variables Extension</title>
+    <author initials='K.' surname='Homme' fullname='K. Homme'>
+    <organization /></author>
+    <date year='2008' month='January' />
+    <abstract>
+      <t>In advanced mail filtering rule sets, it is useful to keep state or configuration
+      details across rules.  This document updates the Sieve filtering language (RFC 5228)
+      with an extension to support variables.  The extension changes the interpretation of
+      strings, adds an action to store data in variables, and supplies a new test so that
+      the value of a string can be examined. [STANDARDS-TRACK]</t>
+    </abstract>
+    </front>
+    <seriesInfo name='RFC' value='5229' />
+    <format type='TXT' octets='20023' target='http://www.rfc-editor.org/rfc/rfc5229.txt' />
+  </reference>
+
+</references>
+
+<!--<references title="Informative References">
+</references>-->
+</back>
+
+</rfc>
