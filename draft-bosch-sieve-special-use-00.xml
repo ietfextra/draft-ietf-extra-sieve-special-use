@@ -41,15 +41,52 @@ Sieve Email Filtering: Delivering to Special-Use Mailboxes
 <keyword>special-use</keyword>
 
 <abstract>
-<t></t>
+<t>The SPECIAL-USE capability of the IMAP protocol (RFC 6154) allows clients to
+identify special-use mailboxes; e.g., where draft or sent messages should be
+put. This simplifies client configuration. In contrast, the Sieve mail filtering
+language (RFC 5228) currently has no such capability. This memo defines a Sieve
+extension that fills this gap: it adds a test for checking whether a special-use
+attribute is assigned for a particular mailbox or any mailbox, and it adds the
+ability to file messages into an anonymous mailbox that has a particular
+special-use attribute assigned.</t>
 </abstract>
 </front>
 
 <middle>
 
 <section title="Introduction">
-<t>This is an extension to the Sieve filtering language defined by
-<xref target="SIEVE">RFC 5228</xref>. [FIXME]</t>
+<t>Commonly, several mailboxes in an
+<xref target="IMAP">IMAP message store</xref> have a special use; e.g.
+it is where the user's draft messages are stored, where a copy of sent messages
+are kept, or it is where spam messages are filed automatically at delivery. The
+<xref target="SPECIAL-USE">SPECIAL-USE capability</xref> of the IMAP protocol
+defines mailbox attributes that identify these special mailboxes explicitly to
+the client. This way, client configuration is simplified significantly. Using
+the <xref target="SPECIAL-USE">CREATE-SPECIAL-USE capability</xref>, IMAP
+clients can also configure these attributes dynamically based on user
+preference.</t>
+
+<t>Unlike the IMAP protocol, the Sieve mail filtering language
+<xref target="SIEVE"/> currently cannot freely access these special-use
+mailbox attributes. Particularly, the Sieve interpreter cannot find an anonymous
+mailbox that has a particular special-use attribute assigned. This would be very
+useful for example to find the user's Spam mailbox at delivery.</t>
+
+<t>In Sieve, limited access to the special-use attributes is provided using the
+<xref target="MAILBOX">"mboxmetadata" extension</xref>, which allows
+testing for the presence of a special-use attribute in the "/private/specialuse"
+<xref target="IMAP-METADATA">IMAP METADATA</xref> entry of a mailbox.
+Still, not all implementers will be willing to add the complexity of the IMAP
+METADATA capability, just to provide access to special-use attributes to the
+Sieve interpreter.</t>
+
+<t>This document defines an extension to the Sieve mail filtering language that
+adds the ability to freely access mailbox special-use attributes. It adds a test
+called "specialuse_exists" that checks whether a special-use attribute is
+assigned for a particular mailbox or - if omitted - any mailbox. It also adds
+the ability to file messages into an anonymous mailbox that has a particular
+special-use attribute assigned using a ":specialuse" argument for the
+<xref target="SIEVE">"fileinto" command</xref>.</t>
 </section>
 
 <section title="Conventions Used in This Document">
@@ -72,8 +109,8 @@ Usage:  specialuse_exists [<mailbox: string>]
 </figure>
 
 <t>If the "mailbox" string argument is omitted, the "specialuse_exists" test
-yields true if for each of the special-use flags listed in the
-"special-use-flags" argument:
+yields true if all of the following statements are true for each of the
+special-use flags listed in the "special-use-flags" argument:
 <list style="letters">
 <t>at least one mailbox exists in the mail store that has that particular
 special-use flag assigned, and</t>
@@ -83,7 +120,7 @@ special-use flag assigned, and</t>
 </t>
 
 <t>If the "mailbox" argument is specified, the "specialuse_exists" test yields
-true if:
+true if all of the following statements are true:
 <list style="letters">
 <t>the indicated mailbox exists, </t>
 <t>that mailbox allows the user in whose context the Sieve script runs
@@ -130,13 +167,13 @@ specified with the ":specialuse" argument assigned to it.</t>
 </t>
 
 <t>The special-use flag specified with the ":specialuse" argument MUST conform
-to the "use-attr" syntax described in Section (FIXME) of [RFC6154] (FIXME).
-Implementations SHOULD handle an invalid special-use flag in the same way as an
-invalid mailbox name is handled. The string parameter of the ":specialuse"
-argument is not a constant string, which means that variable substitutions are
-allowed when the <xref target="VARIABLES">"variables" extension</xref> is
-active. In that case, the syntax of the special-use flag is only verified at
-runtime.</t>
+to the "use-attr" syntax described in Section 6 of
+<xref target="MAILBOX">RFC6154</xref>. Implementations SHOULD handle an invalid
+special-use flag in the same way as an invalid mailbox name is handled. The
+string parameter of the ":specialuse" argument is not a constant string, which
+means that variable substitutions are allowed when the
+<xref target="VARIABLES">"variables" extension</xref> is active. In that case,
+the syntax of the special-use flag is only verified at runtime.</t>
 
 <t>If neither the special-use mailbox nor the default mailbox exists, the 
 "fileinto" action MUST proceed exactly as it does in case the ":specialuse"
@@ -151,7 +188,7 @@ so that the same mailbox is used every time.</t>
 
 <t>If delivery to the special-use mailbox fails for reasons not relating to its
 existence, the Sieve interpreter MUST NOT subsequently attempt delivery in
-the indicated default mailbox as a fallback. Instead, it MUST proceed exactly
+the indicated default mailbox as a fall-back. Instead, it MUST proceed exactly
 as it does in case the ":specialuse" argument is absent and delivery to the
 mailbox named by its positional argument fails. This prevents the situation
 where messages are unexpectedly spread over two mailboxes in case transient or
@@ -170,10 +207,11 @@ instructs the Sieve interpreter to create the specified default mailbox if
 needed. This need arises when both the special-use and the default mailbox are
 not found.</t>
 
-<t>If the server implementation supports the CREATE-SPECIAL-USE capability for
-IMAP [FIXME], i.e. it allows assigning special-use flags to new mailboxes, it
-SHOULD assign the special-use flag specified with the ":specialuse" argument
-to the newly created mailbox.</t> 
+<t>If the server implementation supports the
+<xref target="SPECIAL-USE">CREATE-SPECIAL-USE capability</xref> for IMAP, i.e.
+it allows assigning special-use flags to new mailboxes, it SHOULD assign the
+special-use flag specified with the ":specialuse" argument to the newly created
+mailbox.</t> 
 
 </section>
 </section>
@@ -186,8 +224,67 @@ capability string "special-use".
 </section>
 
 <section title="Examples">
-<t>[FIXME]</t>
+
+<t>The following example saves the message in the mailbox where messages deemed
+to be junk mail are held. This mailbox is identified using the "\Junk"
+special-use attribute. If no mailbox has this attribute assigned, the message
+is filed into the mailbox named "Spam".</t>
+
+<?rfc needLines="5" ?>
+<figure>
+<artwork><![CDATA[
+require "fileinto";
+require "special-use";
+
+fileinto :specialuse "\\Junk" "Spam";
+]]></artwork>
+</figure>
+
+<t>The following very similar example handles the case in which neither a
+"\Junk" special-use mailbox nor the "Spam" mailbox exist. In that case, a
+mailbox called "Spam" is created, and the message is stored there. Additionally,
+the "\Junk" special-use attribute may be assigned to it.
+</t>
+
+<?rfc needLines="6" ?>
+<figure>
+<artwork><![CDATA[
+require "fileinto";
+require "special-use";
+require "mailbox";
+
+fileinto :specialuse "\\Junk" :create "Spam";
+]]></artwork>
+</figure>
+
+<t>The following example is used in a Sieve script that is triggered from an
+IMAP event, rather than at message delivery <xref target="IMAPSIEVE"/>. This
+Sieve script redirects messages to an automated recipient that processes junk
+mail, if those messages are copied or moved into a mailbox that has the "\Junk"
+special-use attribute assigned.</t>
+
+<?rfc needLines="15" ?>
+<figure>
+<artwork><![CDATA[
+require "imapsieve";
+require "special-use";
+require "environment";
+require "variables";
+
+if environment :contains "imap.mailbox" "*" {
+	set "mailbox" "${1}";
+}
+
+if allof(
+	environment "imap.cause" "COPY",
+	specialuse_exists "${mailbox}" "\\Junk") {
+	redirect "spam-report@example.org";
+}
+]]></artwork>
+</figure>
+
 </section>
+
 
 <section anchor="Security" title="Security Considerations">
 <t>[FIXME]</t>
@@ -207,7 +304,12 @@ extension specified in this document:</t>
    Subject: Registration of new Sieve extension
 
    Capability name: special-use
-   Description:     
+   Description:     adds a test for checking whether an IMAP
+                    special-use attribute is assigned for a
+                    particular mailbox or any mailbox, and it adds
+                    the ability to file messages into an anonymous
+                    mailbox that has a particular IMAP special-use
+                    attribute assigned.
    RFC number:      this RFC
    Contact address: Sieve mailing list <sieve@ietf.org>
 ]]></artwork>
@@ -242,25 +344,7 @@ given on http://www.iana.org/assignments/sieve-extensions.</t>
     <date year='1997' month='March' />
     <area>General</area>
     <keyword>keyword</keyword>
-    <abstract>
-      <t>In many standards track documents several words are used to signify
-      the requirements in the specification.  These words are often
-      capitalized.  This document defines these words as they should be
-      interpreted in IETF documents.  Authors who follow these guidelines
-      should incorporate this phrase near the beginning of their document:
-
-      <list>
-      <t>
-        The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL
-        NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED",  "MAY", and
-        "OPTIONAL" in this document are to be interpreted as described in
-        RFC 2119.
-      </t>
-      </list></t>
-      <t>Note that the force of these words is modified by the requirement
-      level of the document in which they are used.
-      </t>
-    </abstract></front>
+		</front>
 
     <seriesInfo name='BCP' value='14' />
     <seriesInfo name='RFC' value='2119' />
@@ -275,15 +359,21 @@ given on http://www.iana.org/assignments/sieve-extensions.</t>
     <author initials='A.' surname='Melnikov' fullname='A. Melnikov'>
     <organization /></author>
     <date year='2009' month='March' />
-    <abstract>
-      <t>This memo defines an extension to the Sieve mail filtering language (RFC 5228) for accessing mailbox and server
-      annotations, checking for mailbox existence, and controlling mailbox creation on "fileinto" action. [STANDARDS-TRACK]</t>
-    </abstract>
     </front>
 
     <seriesInfo name='RFC' value='5490' />
     <format type='TXT' octets='16065' target='http://www.rfc-editor.org/rfc/rfc5490.txt' />
   </reference>
+
+	<reference anchor='IMAP-METADATA' target='http://www.rfc-editor.org/info/rfc5464'>
+		<front>
+		<title>The IMAP METADATA Extension</title>
+		<author initials='C.' surname='Daboo' fullname='C. Daboo'><organization /></author>
+		<date year='2009' month='February' />
+		</front>
+		<seriesInfo name='RFC' value='5464'/>
+		<seriesInfo name='DOI' value='10.17487/RFC5464'/>
+	</reference>
 
   <reference anchor='SIEVE'>
     <front>
@@ -293,19 +383,21 @@ given on http://www.iana.org/assignments/sieve-extensions.</t>
     <author initials='T.' surname='Showalter' fullname='T. Showalter'>
     <organization /></author>
     <date year='2008' month='January' />
-    <abstract>
-      <t>This document describes a language for filtering email messages at time of final delivery.
-      It is designed to be implementable on either a mail client or mail server. It is meant to
-      be extensible, simple, and independent of access protocol, mail architecture, and operating
-      system.  It is suitable for running on a mail server where users may not be allowed to
-      execute arbitrary programs, such as on black box Internet Message Access Protocol (IMAP)
-      servers, as the base language has no variables, loops, or ability to shell out to external
-      programs. [STANDARDS-TRACK]</t>
-    </abstract>
     </front>
     <seriesInfo name='RFC' value='5228' />
     <format type='TXT' octets='87531' target='http://www.rfc-editor.org/rfc/rfc5228.txt' />
-  </reference>  
+  </reference>
+
+	<reference anchor='SPECIAL-USE' target='http://www.rfc-editor.org/info/rfc6154'>
+		<front>
+		<title>IMAP LIST Extension for Special-Use Mailboxes</title>
+		<author initials='B.' surname='Leiba' fullname='B. Leiba'><organization /></author>
+		<author initials='J.' surname='Nicolson' fullname='J. Nicolson'><organization /></author>
+		<date year='2011' month='March' />
+		</front>
+		<seriesInfo name='RFC' value='6154'/>
+		<seriesInfo name='DOI' value='10.17487/RFC6154'/>
+	</reference>  
 
   <reference anchor='VARIABLES'>
     <front>
@@ -313,13 +405,6 @@ given on http://www.iana.org/assignments/sieve-extensions.</t>
     <author initials='K.' surname='Homme' fullname='K. Homme'>
     <organization /></author>
     <date year='2008' month='January' />
-    <abstract>
-      <t>In advanced mail filtering rule sets, it is useful to keep state or configuration
-      details across rules.  This document updates the Sieve filtering language (RFC 5228)
-      with an extension to support variables.  The extension changes the interpretation of
-      strings, adds an action to store data in variables, and supplies a new test so that
-      the value of a string can be examined. [STANDARDS-TRACK]</t>
-    </abstract>
     </front>
     <seriesInfo name='RFC' value='5229' />
     <format type='TXT' octets='20023' target='http://www.rfc-editor.org/rfc/rfc5229.txt' />
@@ -327,8 +412,29 @@ given on http://www.iana.org/assignments/sieve-extensions.</t>
 
 </references>
 
-<!--<references title="Informative References">
-</references>-->
+<references title="Informative References">
+
+	<reference anchor='IMAP' target='http://www.rfc-editor.org/info/rfc3501'>
+		<front>
+		<title>INTERNET MESSAGE ACCESS PROTOCOL - VERSION 4rev1</title>
+		<author initials='M.' surname='Crispin' fullname='M. Crispin'><organization /></author>
+		<date year='2003' month='March' />
+		</front>
+		<seriesInfo name='RFC' value='3501'/>
+		<seriesInfo name='DOI' value='10.17487/RFC3501'/>
+	</reference>
+
+	<reference  anchor='IMAPSIEVE' target='http://www.rfc-editor.org/info/rfc6785'>
+		<front>
+		<title>Support for Internet Message Access Protocol (IMAP) Events in Sieve</title>
+		<author initials='B.' surname='Leiba' fullname='B. Leiba'><organization /></author>
+		<date year='2012' month='November' />
+		</front>
+		<seriesInfo name='RFC' value='6785'/>
+		<seriesInfo name='DOI' value='10.17487/RFC6785'/>
+	</reference>
+
+</references>
 </back>
 
 </rfc>

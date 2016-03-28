@@ -4,14 +4,24 @@
 
 Network Working Group                                           S. Bosch
 Internet-Draft
-Intended status: Standards Track                       February 17, 2016
-Expires: August 20, 2016
+Intended status: Standards Track                          March 29, 2016
+Expires: September 30, 2016
 
 
        Sieve Email Filtering: Delivering to Special-Use Mailboxes
                     draft-bosch-sieve-special-use-00
 
 Abstract
+
+   The SPECIAL-USE capability of the IMAP protocol (RFC 6154) allows
+   clients to identify special-use mailboxes; e.g., where draft or sent
+   messages should be put.  This simplifies client configuration.  In
+   contrast, the Sieve mail filtering language (RFC 5228) currently has
+   no such capability.  This memo defines a Sieve extension that fills
+   this gap: it adds a test for checking whether a special-use attribute
+   is assigned for a particular mailbox or any mailbox, and it adds the
+   ability to file messages into an anonymous mailbox that has a
+   particular special-use attribute assigned.
 
 Status of This Memo
 
@@ -28,7 +38,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on August 20, 2016.
+   This Internet-Draft will expire on September 30, 2016.
 
 Copyright Notice
 
@@ -40,42 +50,78 @@ Copyright Notice
    (http://trustee.ietf.org/license-info) in effect on the date of
    publication of this document.  Please review these documents
    carefully, as they describe your rights and restrictions with respect
+
+
+
+Bosch                  Expires September 30, 2016               [Page 1]
+
+Internet-Draft        Sieve: Special-Use Mailboxes            March 2016
+
+
    to this document.  Code Components extracted from this document must
    include Simplified BSD License text as described in Section 4.e of
    the Trust Legal Provisions and are provided without warranty as
    described in the Simplified BSD License.
 
-
-
-
-
-
-
-
-
-Bosch                    Expires August 20, 2016                [Page 1]
-
-Internet-Draft        Sieve: Special-Use Mailboxes         February 2016
-
-
 Table of Contents
 
    1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   2
-   2.  Conventions Used in This Document . . . . . . . . . . . . . .   2
-   3.  Test "specialuse_exists"  . . . . . . . . . . . . . . . . . .   2
-   4.  ":specialuse" Argument to "fileinto" Command  . . . . . . . .   3
-     4.1.  Interaction with ":create" Argument to "fileinto" Command   4
-   5.  Sieve Capability Strings  . . . . . . . . . . . . . . . . . .   4
-   6.  Examples  . . . . . . . . . . . . . . . . . . . . . . . . . .   4
-   7.  Security Considerations . . . . . . . . . . . . . . . . . . .   5
-   8.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   5
-   9.  Normative References  . . . . . . . . . . . . . . . . . . . .   5
-   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .   5
+   2.  Conventions Used in This Document . . . . . . . . . . . . . .   3
+   3.  Test "specialuse_exists"  . . . . . . . . . . . . . . . . . .   3
+   4.  ":specialuse" Argument to "fileinto" Command  . . . . . . . .   4
+     4.1.  Interaction with ":create" Argument to "fileinto" Command   5
+   5.  Sieve Capability Strings  . . . . . . . . . . . . . . . . . .   5
+   6.  Examples  . . . . . . . . . . . . . . . . . . . . . . . . . .   5
+   7.  Security Considerations . . . . . . . . . . . . . . . . . . .   6
+   8.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   6
+   9.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   7
+     9.1.  Normative References  . . . . . . . . . . . . . . . . . .   7
+     9.2.  Informative References  . . . . . . . . . . . . . . . . .   8
+   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .   8
 
 1.  Introduction
 
-   This is an extension to the Sieve filtering language defined by RFC
-   5228 [SIEVE].  [FIXME]
+   Commonly, several mailboxes in an IMAP message store [IMAP] have a
+   special use; e.g.  it is where the user's draft messages are stored,
+   where a copy of sent messages are kept, or it is where spam messages
+   are filed automatically at delivery.  The SPECIAL-USE capability
+   [SPECIAL-USE] of the IMAP protocol defines mailbox attributes that
+   identify these special mailboxes explicitly to the client.  This way,
+   client configuration is simplified significantly.  Using the CREATE-
+   SPECIAL-USE capability [SPECIAL-USE], IMAP clients can also configure
+   these attributes dynamically based on user preference.
+
+   Unlike the IMAP protocol, the Sieve mail filtering language [SIEVE]
+   currently cannot freely access these special-use mailbox attributes.
+   Particularly, the Sieve interpreter cannot find an anonymous mailbox
+   that has a particular special-use attribute assigned.  This would be
+   very useful for example to find the user's Spam mailbox at delivery.
+
+   In Sieve, limited access to the special-use attributes is provided
+   using the "mboxmetadata" extension [MAILBOX], which allows testing
+   for the presence of a special-use attribute in the "/private/
+   specialuse" IMAP METADATA [IMAP-METADATA] entry of a mailbox.  Still,
+   not all implementers will be willing to add the complexity of the
+   IMAP METADATA capability, just to provide access to special-use
+   attributes to the Sieve interpreter.
+
+
+
+
+
+Bosch                  Expires September 30, 2016               [Page 2]
+
+Internet-Draft        Sieve: Special-Use Mailboxes            March 2016
+
+
+   This document defines an extension to the Sieve mail filtering
+   language that adds the ability to freely access mailbox special-use
+   attributes.  It adds a test called "specialuse_exists" that checks
+   whether a special-use attribute is assigned for a particular mailbox
+   or - if omitted - any mailbox.  It also adds the ability to file
+   messages into an anonymous mailbox that has a particular special-use
+   attribute assigned using a ":specialuse" argument for the "fileinto"
+   command [SIEVE].
 
 2.  Conventions Used in This Document
 
@@ -93,8 +139,8 @@ Table of Contents
                              <special-use-flags: string-list>
 
    If the "mailbox" string argument is omitted, the "specialuse_exists"
-   test yields true if for each of the special-use flags listed in the
-   "special-use-flags" argument:
+   test yields true if all of the following statements are true for each
+   of the special-use flags listed in the "special-use-flags" argument:
 
    a.  at least one mailbox exists in the mail store that has that
        particular special-use flag assigned, and
@@ -103,16 +149,9 @@ Table of Contents
        runs to "deliver" messages into it.
 
    If the "mailbox" argument is specified, the "specialuse_exists" test
-   yields true if:
+   yields true if all of the following statements are true:
 
    a.  the indicated mailbox exists,
-
-
-
-Bosch                    Expires August 20, 2016                [Page 2]
-
-Internet-Draft        Sieve: Special-Use Mailboxes         February 2016
-
 
    b.  that mailbox allows the user in whose context the Sieve script
        runs to "deliver" messages into it, and
@@ -123,6 +162,13 @@ Internet-Draft        Sieve: Special-Use Mailboxes         February 2016
    Refer to the specification of the "mailboxexists" test in Section 3.1
    of RFC 5490 [MAILBOX] for a definition of when "delivery" of messages
    into a mailbox is deemed possible.
+
+
+
+Bosch                  Expires September 30, 2016               [Page 3]
+
+Internet-Draft        Sieve: Special-Use Mailboxes            March 2016
+
 
 4.  ":specialuse" Argument to "fileinto" Command
 
@@ -150,26 +196,17 @@ Internet-Draft        Sieve: Special-Use Mailboxes         February 2016
       not found.
 
    The special-use flag specified with the ":specialuse" argument MUST
-   conform to the "use-attr" syntax described in Section (FIXME) of
-   [RFC6154] (FIXME).  Implementations SHOULD handle an invalid special-
-   use flag in the same way as an invalid mailbox name is handled.  The
-   string parameter of the ":specialuse" argument is not a constant
-   string, which means that variable substitutions are allowed when the
+   conform to the "use-attr" syntax described in Section 6 of RFC6154
+   [MAILBOX].  Implementations SHOULD handle an invalid special-use flag
+   in the same way as an invalid mailbox name is handled.  The string
+   parameter of the ":specialuse" argument is not a constant string,
+   which means that variable substitutions are allowed when the
    "variables" extension [VARIABLES] is active.  In that case, the
    syntax of the special-use flag is only verified at runtime.
 
    If neither the special-use mailbox nor the default mailbox exists,
    the "fileinto" action MUST proceed exactly as it does in case the
    ":specialuse" is argument is absent and the mailbox named by its
-
-
-
-
-Bosch                    Expires August 20, 2016                [Page 3]
-
-Internet-Draft        Sieve: Special-Use Mailboxes         February 2016
-
-
    positional argument does not exist.  The various options for handling
    this situation are described in Section 4.1 of RFC5228 [SIEVE].
 
@@ -181,12 +218,20 @@ Internet-Draft        Sieve: Special-Use Mailboxes         February 2016
 
    If delivery to the special-use mailbox fails for reasons not relating
    to its existence, the Sieve interpreter MUST NOT subsequently attempt
-   delivery in the indicated default mailbox as a fallback.  Instead, it
-   MUST proceed exactly as it does in case the ":specialuse" argument is
-   absent and delivery to the mailbox named by its positional argument
-   fails.  This prevents the situation where messages are unexpectedly
-   spread over two mailboxes in case transient or intermittent delivery
-   failures occur.
+
+
+
+Bosch                  Expires September 30, 2016               [Page 4]
+
+Internet-Draft        Sieve: Special-Use Mailboxes            March 2016
+
+
+   delivery in the indicated default mailbox as a fall-back.  Instead,
+   it MUST proceed exactly as it does in case the ":specialuse" argument
+   is absent and delivery to the mailbox named by its positional
+   argument fails.  This prevents the situation where messages are
+   unexpectedly spread over two mailboxes in case transient or
+   intermittent delivery failures occur.
 
 4.1.  Interaction with ":create" Argument to "fileinto" Command
 
@@ -202,8 +247,8 @@ Internet-Draft        Sieve: Special-Use Mailboxes         February 2016
    the default mailbox are not found.
 
    If the server implementation supports the CREATE-SPECIAL-USE
-   capability for IMAP [FIXME], i.e. it allows assigning special-use
-   flags to new mailboxes, it SHOULD assign the special-use flag
+   capability [SPECIAL-USE] for IMAP, i.e.  it allows assigning special-
+   use flags to new mailboxes, it SHOULD assign the special-use flag
    specified with the ":specialuse" argument to the newly created
    mailbox.
 
@@ -215,16 +260,57 @@ Internet-Draft        Sieve: Special-Use Mailboxes         February 2016
 
 6.  Examples
 
-   [FIXME]
+   The following example saves the message in the mailbox where messages
+   deemed to be junk mail are held.  This mailbox is identified using
+   the "\Junk" special-use attribute.  If no mailbox has this attribute
+   assigned, the message is filed into the mailbox named "Spam".
+
+   require "fileinto";
+   require "special-use";
+
+   fileinto :specialuse "\\Junk" "Spam";
+
+   The following very similar example handles the case in which neither
+   a "\Junk" special-use mailbox nor the "Spam" mailbox exist.  In that
+   case, a mailbox called "Spam" is created, and the message is stored
 
 
 
 
-
-Bosch                    Expires August 20, 2016                [Page 4]
+Bosch                  Expires September 30, 2016               [Page 5]
 
-Internet-Draft        Sieve: Special-Use Mailboxes         February 2016
+Internet-Draft        Sieve: Special-Use Mailboxes            March 2016
 
+
+   there.  Additionally, the "\Junk" special-use attribute may be
+   assigned to it.
+
+   require "fileinto";
+   require "special-use";
+   require "mailbox";
+
+   fileinto :specialuse "\\Junk" :create "Spam";
+
+   The following example is used in a Sieve script that is triggered
+   from an IMAP event, rather than at message delivery [IMAPSIEVE].
+   This Sieve script redirects messages to an automated recipient that
+   processes junk mail, if those messages are copied or moved into a
+   mailbox that has the "\Junk" special-use attribute assigned.
+
+   require "imapsieve";
+   require "special-use";
+   require "environment";
+   require "variables";
+
+   if environment :contains "imap.mailbox" "*" {
+       set "mailbox" "${1}";
+   }
+
+   if allof(
+       environment "imap.cause" "COPY",
+       specialuse_exists "${mailbox}" "\\Junk") {
+       redirect "spam-report@example.org";
+   }
 
 7.  Security Considerations
 
@@ -237,18 +323,45 @@ Internet-Draft        Sieve: Special-Use Mailboxes         February 2016
    The following template specifies the IANA registration of the Sieve
    extension specified in this document:
 
+
+
+
+
+
+
+
+
+
+
+Bosch                  Expires September 30, 2016               [Page 6]
+
+Internet-Draft        Sieve: Special-Use Mailboxes            March 2016
+
+
       To: iana@iana.org
       Subject: Registration of new Sieve extension
 
       Capability name: special-use
-      Description:
+      Description:     adds a test for checking whether an IMAP
+                       special-use attribute is assigned for a
+                       particular mailbox or any mailbox, and it adds
+                       the ability to file messages into an anonymous
+                       mailbox that has a particular IMAP special-use
+                       attribute assigned.
       RFC number:      this RFC
       Contact address: Sieve mailing list <sieve@ietf.org>
 
    This information should be added to the list of sieve extensions
    given on http://www.iana.org/assignments/sieve-extensions.
 
-9.  Normative References
+9.  References
+
+9.1.  Normative References
+
+   [IMAP-METADATA]
+              Daboo, C., "The IMAP METADATA Extension", RFC 5464, DOI
+              10.17487/RFC5464, February 2009,
+              <http://www.rfc-editor.org/info/rfc5464>.
 
    [KEYWORDS]
               Bradner, S., "Key words for use in RFCs to Indicate
@@ -261,9 +374,36 @@ Internet-Draft        Sieve: Special-Use Mailboxes         February 2016
    [SIEVE]    Guenther, P. and T. Showalter, "Sieve: An Email Filtering
               Language", RFC 5228, January 2008.
 
+   [SPECIAL-USE]
+              Leiba, B. and J. Nicolson, "IMAP LIST Extension for
+              Special-Use Mailboxes", RFC 6154, DOI 10.17487/RFC6154,
+              March 2011, <http://www.rfc-editor.org/info/rfc6154>.
+
    [VARIABLES]
               Homme, K., "Sieve Email Filtering: Variables Extension",
               RFC 5229, January 2008.
+
+
+
+
+
+
+
+Bosch                  Expires September 30, 2016               [Page 7]
+
+Internet-Draft        Sieve: Special-Use Mailboxes            March 2016
+
+
+9.2.  Informative References
+
+   [IMAP]     Crispin, M., "INTERNET MESSAGE ACCESS PROTOCOL - VERSION
+              4rev1", RFC 3501, DOI 10.17487/RFC3501, March 2003,
+              <http://www.rfc-editor.org/info/rfc3501>.
+
+   [IMAPSIEVE]
+              Leiba, B., "Support for Internet Message Access Protocol
+              (IMAP) Events in Sieve", RFC 6785, DOI 10.17487/RFC6785,
+              November 2012, <http://www.rfc-editor.org/info/rfc6785>.
 
 Author's Address
 
@@ -277,4 +417,32 @@ Author's Address
 
 
 
-Bosch                    Expires August 20, 2016                [Page 5]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Bosch                  Expires September 30, 2016               [Page 8]
