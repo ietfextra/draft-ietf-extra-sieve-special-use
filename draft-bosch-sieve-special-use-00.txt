@@ -3,9 +3,9 @@
 
 
 Network Working Group                                           S. Bosch
-Internet-Draft
-Intended status: Standards Track                          March 29, 2016
-Expires: September 30, 2016
+Internet-Draft                                                Dovecot Oy
+Intended status: Standards Track                           April 4, 2016
+Expires: October 6, 2016
 
 
        Sieve Email Filtering: Delivering to Special-Use Mailboxes
@@ -38,7 +38,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on September 30, 2016.
+   This Internet-Draft will expire on October 6, 2016.
 
 Copyright Notice
 
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Bosch                  Expires September 30, 2016               [Page 1]
+Bosch                    Expires October 6, 2016                [Page 1]
 
-Internet-Draft        Sieve: Special-Use Mailboxes            March 2016
+Internet-Draft        Sieve: Special-Use Mailboxes            April 2016
 
 
    to this document.  Code Components extracted from this document must
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Bosch                  Expires September 30, 2016               [Page 2]
+Bosch                    Expires October 6, 2016                [Page 2]
 
-Internet-Draft        Sieve: Special-Use Mailboxes            March 2016
+Internet-Draft        Sieve: Special-Use Mailboxes            April 2016
 
 
    This document defines an extension to the Sieve mail filtering
@@ -165,9 +165,9 @@ Internet-Draft        Sieve: Special-Use Mailboxes            March 2016
 
 
 
-Bosch                  Expires September 30, 2016               [Page 3]
+Bosch                    Expires October 6, 2016                [Page 3]
 
-Internet-Draft        Sieve: Special-Use Mailboxes            March 2016
+Internet-Draft        Sieve: Special-Use Mailboxes            April 2016
 
 
 4.  ":specialuse" Argument to "fileinto" Command
@@ -221,9 +221,9 @@ Internet-Draft        Sieve: Special-Use Mailboxes            March 2016
 
 
 
-Bosch                  Expires September 30, 2016               [Page 4]
+Bosch                    Expires October 6, 2016                [Page 4]
 
-Internet-Draft        Sieve: Special-Use Mailboxes            March 2016
+Internet-Draft        Sieve: Special-Use Mailboxes            April 2016
 
 
    delivery in the indicated default mailbox as a fall-back.  Instead,
@@ -277,9 +277,9 @@ Internet-Draft        Sieve: Special-Use Mailboxes            March 2016
 
 
 
-Bosch                  Expires September 30, 2016               [Page 5]
+Bosch                    Expires October 6, 2016                [Page 5]
 
-Internet-Draft        Sieve: Special-Use Mailboxes            March 2016
+Internet-Draft        Sieve: Special-Use Mailboxes            April 2016
 
 
    there.  Additionally, the "\Junk" special-use attribute may be
@@ -333,9 +333,9 @@ Internet-Draft        Sieve: Special-Use Mailboxes            March 2016
 
 
 
-Bosch                  Expires September 30, 2016               [Page 6]
+Bosch                    Expires October 6, 2016                [Page 6]
 
-Internet-Draft        Sieve: Special-Use Mailboxes            March 2016
+Internet-Draft        Sieve: Special-Use Mailboxes            April 2016
 
 
       To: iana@iana.org
@@ -389,9 +389,9 @@ Internet-Draft        Sieve: Special-Use Mailboxes            March 2016
 
 
 
-Bosch                  Expires September 30, 2016               [Page 7]
+Bosch                    Expires October 6, 2016                [Page 7]
 
-Internet-Draft        Sieve: Special-Use Mailboxes            March 2016
+Internet-Draft        Sieve: Special-Use Mailboxes            April 2016
 
 
 9.2.  Informative References
@@ -408,14 +408,12 @@ Internet-Draft        Sieve: Special-Use Mailboxes            March 2016
 Author's Address
 
    Stephan Bosch
-   Enschede
-   NL
+   Dovecot Oy
+   Lars Sonckin Kaari 16
+   Espoo  02600
+   Finland
 
-   Email: stephan@rename-it.nl
-
-
-
-
+   Email: stephan.bosch@dovecot.fi
 
 
 
@@ -445,4 +443,6 @@ Author's Address
 
 
 
-Bosch                  Expires September 30, 2016               [Page 8]
+
+
+Bosch                    Expires October 6, 2016                [Page 8]
