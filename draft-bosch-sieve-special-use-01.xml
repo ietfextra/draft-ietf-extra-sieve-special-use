@@ -12,7 +12,7 @@
 <?rfc compact="yes" ?>
 <?rfc subcompact="no" ?>
 
-<rfc category="std" docName="draft-bosch-sieve-special-use-00" ipr="trust200902">
+<rfc category="std" docName="draft-bosch-sieve-special-use-01" ipr="trust200902">
 <!-- ***** FRONT MATTER ***** -->
 
 <front>
@@ -288,9 +288,10 @@ if allof(
 
 
 <section anchor="Security" title="Security Considerations">
-<t>[FIXME]</t>
-<t>Additional security considerations are discussed in
-<xref target="SIEVE"/>.</t>
+<t>Security considerations are discussed in
+<xref target="SIEVE"/> and <xref target="SPECIAL-USE"/>. It is believed
+that this extension does not introduce any additional security
+concerns.</t>
 </section>
 
 <section anchor="IANA" title="IANA Considerations">
@@ -318,6 +319,11 @@ extension specified in this document:</t>
 
 <t>This information should be added to the list of sieve extensions
 given on http://www.iana.org/assignments/sieve-extensions.</t>
+</section>
+
+<section title="Acknowledgements">
+<t>Thanks to Barry Leiba, Alexey Melnikov, Ken Murchison, and Ned Freed
+for reviews and suggestions.</t>
 </section>
 </middle>
 
