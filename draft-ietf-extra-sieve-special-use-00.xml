@@ -12,7 +12,7 @@
 <?rfc compact="yes" ?>
 <?rfc subcompact="no" ?>
 
-<rfc category="std" docName="draft-bosch-sieve-special-use-02" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-extra-sieve-special-use-00" ipr="trust200902">
 <!-- ***** FRONT MATTER ***** -->
 
 <front>
@@ -24,7 +24,7 @@ Sieve Email Filtering: Delivering to Special-Use Mailboxes
 	<organization>Dovecot Oy</organization>
   <address>
     <postal>
-			<street>Lars Sonckin Kaari 16</street>
+			<street>Lars Sonckin Kaari 10</street>
 			<code>02600</code>
 			<city>Espoo</city>
 			<country>Finland</country>
@@ -35,8 +35,8 @@ Sieve Email Filtering: Delivering to Special-Use Mailboxes
 
 <date/>
 
-<area>General</area>
-<!--<workgroup>Sieve Working Group</workgroup>-->
+<area>ART</area>
+<workgroup>EXTRA</workgroup>
 <keyword>sieve</keyword>
 <keyword>mailbox</keyword>
 <keyword>special-use</keyword>
