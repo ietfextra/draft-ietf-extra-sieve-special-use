@@ -288,10 +288,9 @@ if allof(
 
 
 <section anchor="Security" title="Security Considerations">
-<t>Security considerations are discussed in
-<xref target="SIEVE"/> and <xref target="SPECIAL-USE"/>. It is believed
-that this extension does not introduce any additional security
-concerns.</t>
+<t>Security considerations are discussed in <xref target="SIEVE"/>,
+<xref target="VARIABLES"/>, and <xref target="SPECIAL-USE"/>. It is believed that
+this extension does not introduce any additional security concerns.</t>
 </section>
 
 <section anchor="IANA" title="IANA Considerations">
@@ -322,8 +321,8 @@ given on http://www.iana.org/assignments/sieve-extensions.</t>
 </section>
 
 <section title="Acknowledgements">
-<t>Thanks to Barry Leiba, Alexey Melnikov, Ken Murchison, and Ned Freed
-for reviews and suggestions.</t>
+<t>Thanks to Stan Kalisch, Barry Leiba, Alexey Melnikov, Ken Murchison,
+and Ned Freed for reviews and suggestions.</t>
 </section>
 </middle>
 

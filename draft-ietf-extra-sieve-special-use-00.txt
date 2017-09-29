@@ -4,8 +4,8 @@
 
 EXTRA                                                           S. Bosch
 Internet-Draft                                                Dovecot Oy
-Intended status: Standards Track                      September 13, 2017
-Expires: March 17, 2018
+Intended status: Standards Track                      September 29, 2017
+Expires: April 2, 2018
 
 
        Sieve Email Filtering: Delivering to Special-Use Mailboxes
@@ -38,7 +38,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on March 17, 2018.
+   This Internet-Draft will expire on April 2, 2018.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Bosch                    Expires March 17, 2018                 [Page 1]
+Bosch                     Expires April 2, 2018                 [Page 1]
 
 Internet-Draft        Sieve: Special-Use Mailboxes        September 2017
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Bosch                    Expires March 17, 2018                 [Page 2]
+Bosch                     Expires April 2, 2018                 [Page 2]
 
 Internet-Draft        Sieve: Special-Use Mailboxes        September 2017
 
@@ -165,7 +165,7 @@ Internet-Draft        Sieve: Special-Use Mailboxes        September 2017
 
 
 
-Bosch                    Expires March 17, 2018                 [Page 3]
+Bosch                     Expires April 2, 2018                 [Page 3]
 
 Internet-Draft        Sieve: Special-Use Mailboxes        September 2017
 
@@ -221,7 +221,7 @@ Internet-Draft        Sieve: Special-Use Mailboxes        September 2017
 
 
 
-Bosch                    Expires March 17, 2018                 [Page 4]
+Bosch                     Expires April 2, 2018                 [Page 4]
 
 Internet-Draft        Sieve: Special-Use Mailboxes        September 2017
 
@@ -277,7 +277,7 @@ Internet-Draft        Sieve: Special-Use Mailboxes        September 2017
 
 
 
-Bosch                    Expires March 17, 2018                 [Page 5]
+Bosch                     Expires April 2, 2018                 [Page 5]
 
 Internet-Draft        Sieve: Special-Use Mailboxes        September 2017
 
@@ -314,9 +314,9 @@ Internet-Draft        Sieve: Special-Use Mailboxes        September 2017
 
 7.  Security Considerations
 
-   Security considerations are discussed in [SIEVE] and [SPECIAL-USE].
-   It is believed that this extension does not introduce any additional
-   security concerns.
+   Security considerations are discussed in [SIEVE], [VARIABLES], and
+   [SPECIAL-USE].  It is believed that this extension does not introduce
+   any additional security concerns.
 
 8.  IANA Considerations
 
@@ -333,7 +333,7 @@ Internet-Draft        Sieve: Special-Use Mailboxes        September 2017
 
 
 
-Bosch                    Expires March 17, 2018                 [Page 6]
+Bosch                     Expires April 2, 2018                 [Page 6]
 
 Internet-Draft        Sieve: Special-Use Mailboxes        September 2017
 
@@ -356,8 +356,8 @@ Internet-Draft        Sieve: Special-Use Mailboxes        September 2017
 
 9.  Acknowledgements
 
-   Thanks to Barry Leiba, Alexey Melnikov, Ken Murchison, and Ned Freed
-   for reviews and suggestions.
+   Thanks to Stan Kalisch, Barry Leiba, Alexey Melnikov, Ken Murchison,
+   and Ned Freed for reviews and suggestions.
 
 10.  References
 
@@ -389,7 +389,7 @@ Internet-Draft        Sieve: Special-Use Mailboxes        September 2017
 
 
 
-Bosch                    Expires March 17, 2018                 [Page 7]
+Bosch                     Expires April 2, 2018                 [Page 7]
 
 Internet-Draft        Sieve: Special-Use Mailboxes        September 2017
 
@@ -445,4 +445,4 @@ Author's Address
 
 
 
-Bosch                    Expires March 17, 2018                 [Page 8]
+Bosch                     Expires April 2, 2018                 [Page 8]
