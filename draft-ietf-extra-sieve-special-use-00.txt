@@ -359,6 +359,8 @@ Internet-Draft        Sieve: Special-Use Mailboxes        September 2017
    Thanks to Stan Kalisch, Barry Leiba, Alexey Melnikov, Ken Murchison,
    and Ned Freed for reviews and suggestions.
 
+   [FIXME: some text is borrowed from other RFCs; mention these].
+
 10.  References
 
 10.1.  Normative References
@@ -383,8 +385,6 @@ Internet-Draft        Sieve: Special-Use Mailboxes        September 2017
               Leiba, B. and J. Nicolson, "IMAP LIST Extension for
               Special-Use Mailboxes", RFC 6154, DOI 10.17487/RFC6154,
               March 2011, <http://www.rfc-editor.org/info/rfc6154>.
-
-
 
 
 

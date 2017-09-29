@@ -323,6 +323,7 @@ given on http://www.iana.org/assignments/sieve-extensions.</t>
 <section title="Acknowledgements">
 <t>Thanks to Stan Kalisch, Barry Leiba, Alexey Melnikov, Ken Murchison,
 and Ned Freed for reviews and suggestions.</t>
+<t>[FIXME: some text is borrowed from other RFCs; mention these].</t>
 </section>
 </middle>
 
