@@ -74,7 +74,7 @@ mailbox that has a particular special-use attribute assigned. This would be very
 useful for example to find the user's Spam mailbox at delivery.</t>
 
 <t>In Sieve, limited access to the special-use attributes is provided using the
-<xref target="MAILBOX">"mboxmetadata" extension</xref>, which allows
+<xref target="SIEVE-MAILBOX">"mboxmetadata" extension</xref>, which allows
 testing for the presence of a special-use attribute in the "/private/specialuse"
 <xref target="IMAP-METADATA">IMAP METADATA</xref> entry of a mailbox.
 Still, not all implementers will be willing to add the complexity of the IMAP
@@ -132,7 +132,7 @@ to "deliver" messages into it, and</t>
 </t>
 
 <t>Refer to the specification of the "mailboxexists" test in Section 3.1 of
-<xref target="MAILBOX">RFC 5490</xref> for a definition of when "delivery"
+<xref target="SIEVE-MAILBOX">RFC 5490</xref> for a definition of when "delivery"
 of messages into a mailbox is deemed possible.</t>
 
 </section>
@@ -169,10 +169,10 @@ specified with the ":specialuse" argument assigned to it.</t>
 
 <t>The special-use flag specified with the ":specialuse" argument MUST conform
 to the "use-attr" syntax described in Section 6 of
-<xref target="MAILBOX">RFC6154</xref>. Implementations SHOULD handle an invalid
-special-use flag in the same way as an invalid mailbox name is handled. The
-string parameter of the ":specialuse" argument is not a constant string, which
-means that variable substitutions are allowed when the
+<xref target="SIEVE-MAILBOX">RFC6154</xref>. Implementations SHOULD handle an
+invalid special-use flag in the same way as an invalid mailbox name is handled.
+The string parameter of the ":specialuse" argument is not a constant string,
+which means that variable substitutions are allowed when the
 <xref target="VARIABLES">"variables" extension</xref> is active. In that case,
 the syntax of the special-use flag is only verified at runtime.</t>
 
@@ -197,7 +197,7 @@ intermittent delivery failures occur.</t>
 
 <section title="Interaction with &quot;:create&quot; Argument to &quot;fileinto&quot; Command">
 
-<t>The <xref target="MAILBOX">"mailbox" extension</xref> adds the optional
+<t>The <xref target="SIEVE-MAILBOX">"mailbox" extension</xref> adds the optional
 ":create" argument to the "fileinto" command. If the optional ":create" argument
 is specified with "fileinto", it instructs the Sieve interpreter to create the
 specified mailbox if needed, before attempting to deliver the message into the
@@ -360,18 +360,6 @@ and Ned Freed for reviews and suggestions.</t>
     <format type='XML' octets='5777' target='http://xml.resource.org/public/rfc/xml/rfc2119.xml' />
   </reference>
 
-  <reference anchor='MAILBOX'>
-    <front>
-    <title>The Sieve Mail-Filtering Language -- Extensions for Checking Mailbox Status and Accessing Mailbox Metadata</title>
-    <author initials='A.' surname='Melnikov' fullname='A. Melnikov'>
-    <organization /></author>
-    <date year='2009' month='March' />
-    </front>
-
-    <seriesInfo name='RFC' value='5490' />
-    <format type='TXT' octets='16065' target='http://www.rfc-editor.org/rfc/rfc5490.txt' />
-  </reference>
-
 	<reference anchor='IMAP-METADATA' target='http://www.rfc-editor.org/info/rfc5464'>
 		<front>
 		<title>The IMAP METADATA Extension</title>
@@ -393,6 +381,18 @@ and Ned Freed for reviews and suggestions.</t>
     </front>
     <seriesInfo name='RFC' value='5228' />
     <format type='TXT' octets='87531' target='http://www.rfc-editor.org/rfc/rfc5228.txt' />
+  </reference>
+
+  <reference anchor='SIEVE-MAILBOX'>
+    <front>
+    <title>The Sieve Mail-Filtering Language -- Extensions for Checking Mailbox Status and Accessing Mailbox Metadata</title>
+    <author initials='A.' surname='Melnikov' fullname='A. Melnikov'>
+    <organization /></author>
+    <date year='2009' month='March' />
+    </front>
+
+    <seriesInfo name='RFC' value='5490' />
+    <format type='TXT' octets='16065' target='http://www.rfc-editor.org/rfc/rfc5490.txt' />
   </reference>
 
 	<reference anchor='SPECIAL-USE' target='http://www.rfc-editor.org/info/rfc6154'>
