@@ -323,7 +323,8 @@ given on http://www.iana.org/assignments/sieve-extensions.</t>
 <section title="Acknowledgements">
 <t>Thanks to Stan Kalisch, Barry Leiba, Alexey Melnikov, Ken Murchison,
 and Ned Freed for reviews and suggestions.</t>
-<t>[FIXME: some text is borrowed from other RFCs; mention these].</t>
+<t>Thanks to the authors of <xref target="SIEVE-MAILBOX">RFC5490</xref> from
+which some descriptive text is borrowed in this document.</t>
 </section>
 </middle>
 

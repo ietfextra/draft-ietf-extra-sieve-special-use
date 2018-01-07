@@ -359,7 +359,8 @@ Internet-Draft        Sieve: Special-Use Mailboxes          January 2018
    Thanks to Stan Kalisch, Barry Leiba, Alexey Melnikov, Ken Murchison,
    and Ned Freed for reviews and suggestions.
 
-   [FIXME: some text is borrowed from other RFCs; mention these].
+   Thanks to the authors of RFC5490 [SIEVE-MAILBOX] from which some
+   descriptive text is borrowed in this document.
 
 10.  References
 
@@ -382,10 +383,9 @@ Internet-Draft        Sieve: Special-Use Mailboxes          January 2018
               Extensions for Checking Mailbox Status and Accessing
               Mailbox Metadata", RFC 5490, March 2009.
 
-   [SPECIAL-USE]
-              Leiba, B. and J. Nicolson, "IMAP LIST Extension for
-              Special-Use Mailboxes", RFC 6154, DOI 10.17487/RFC6154,
-              March 2011, <http://www.rfc-editor.org/info/rfc6154>.
+
+
+
 
 
 
@@ -393,6 +393,11 @@ Bosch                     Expires July 11, 2018                 [Page 7]
 
 Internet-Draft        Sieve: Special-Use Mailboxes          January 2018
 
+
+   [SPECIAL-USE]
+              Leiba, B. and J. Nicolson, "IMAP LIST Extension for
+              Special-Use Mailboxes", RFC 6154, DOI 10.17487/RFC6154,
+              March 2011, <http://www.rfc-editor.org/info/rfc6154>.
 
    [VARIABLES]
               Homme, K., "Sieve Email Filtering: Variables Extension",
@@ -418,11 +423,6 @@ Author's Address
    Finland
 
    Email: stephan.bosch@dovecot.fi
-
-
-
-
-
 
 
 
