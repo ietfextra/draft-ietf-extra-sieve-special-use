@@ -273,13 +273,13 @@ require "environment";
 require "variables";
 
 if environment :contains "imap.mailbox" "*" {
-	set "mailbox" "${1}";
+    set "mailbox" "${1}";
 }
 
 if allof(
-	environment "imap.cause" "COPY",
-	specialuse_exists "${mailbox}" "\\Junk") {
-	redirect "spam-report@example.org";
+    environment "imap.cause" "COPY",
+    specialuse_exists "${mailbox}" "\\Junk") {
+    redirect "spam-report@example.org";
 }
 ]]></artwork>
 </figure>
