@@ -4,8 +4,8 @@
 
 EXTRA                                                           S. Bosch
 Internet-Draft                                                Dovecot Oy
-Intended status: Standards Track                         January 7, 2018
-Expires: July 11, 2018
+Intended status: Standards Track                        February 5, 2018
+Expires: August 9, 2018
 
 
        Sieve Email Filtering: Delivering to Special-Use Mailboxes
@@ -38,7 +38,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on July 11, 2018.
+   This Internet-Draft will expire on August 9, 2018.
 
 Copyright Notice
 
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Bosch                     Expires July 11, 2018                 [Page 1]
+Bosch                    Expires August 9, 2018                 [Page 1]
 
-Internet-Draft        Sieve: Special-Use Mailboxes          January 2018
+Internet-Draft        Sieve: Special-Use Mailboxes         February 2018
 
 
    to this document.  Code Components extracted from this document must
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Bosch                     Expires July 11, 2018                 [Page 2]
+Bosch                    Expires August 9, 2018                 [Page 2]
 
-Internet-Draft        Sieve: Special-Use Mailboxes          January 2018
+Internet-Draft        Sieve: Special-Use Mailboxes         February 2018
 
 
    This document defines an extension to the Sieve mail filtering
@@ -165,9 +165,9 @@ Internet-Draft        Sieve: Special-Use Mailboxes          January 2018
 
 
 
-Bosch                     Expires July 11, 2018                 [Page 3]
+Bosch                    Expires August 9, 2018                 [Page 3]
 
-Internet-Draft        Sieve: Special-Use Mailboxes          January 2018
+Internet-Draft        Sieve: Special-Use Mailboxes         February 2018
 
 
 4.  ":specialuse" Argument to "fileinto" Command
@@ -211,21 +211,26 @@ Internet-Draft        Sieve: Special-Use Mailboxes          January 2018
    this situation are described in Section 4.1 of RFC5228 [SIEVE].
 
    More than one mailbox can have a particular special-use flag
-   assigned.  In that case, the mailbox that is chosen for delivery is
-   implementation-defined.  However, implementations MUST ensure that
-   this choice is made consistently, so that the same mailbox is used
-   every time.
+   assigned.  In case of such ambiguity, the mailbox that is chosen for
+   delivery is implementation-defined.  However, while the set of
+   mailboxes to which the involved special-use flags are assigned
+   remains unchanged, implementations MUST ensure that the mailbox
+   choice is made consistently, so that the same mailbox is used every
+   time.  Conversely, the chosen mailbox MAY change once the special-use
+
+
+
+
+Bosch                    Expires August 9, 2018                 [Page 4]
+
+Internet-Draft        Sieve: Special-Use Mailboxes         February 2018
+
+
+   flag assignments that are relevant for the mailbox choice are changed
+   (usually by user interaction).
 
    If delivery to the special-use mailbox fails for reasons not relating
    to its existence, the Sieve interpreter MUST NOT subsequently attempt
-
-
-
-Bosch                     Expires July 11, 2018                 [Page 4]
-
-Internet-Draft        Sieve: Special-Use Mailboxes          January 2018
-
-
    delivery in the indicated default mailbox as a fall-back.  Instead,
    it MUST proceed exactly as it does in case the ":specialuse" argument
    is absent and delivery to the mailbox named by its positional
@@ -270,18 +275,16 @@ Internet-Draft        Sieve: Special-Use Mailboxes          January 2018
 
    fileinto :specialuse "\\Junk" "Spam";
 
+
+
+Bosch                    Expires August 9, 2018                 [Page 5]
+
+Internet-Draft        Sieve: Special-Use Mailboxes         February 2018
+
+
    The following very similar example handles the case in which neither
    a "\Junk" special-use mailbox nor the "Spam" mailbox exist.  In that
    case, a mailbox called "Spam" is created, and the message is stored
-
-
-
-
-Bosch                     Expires July 11, 2018                 [Page 5]
-
-Internet-Draft        Sieve: Special-Use Mailboxes          January 2018
-
-
    there.  Additionally, the "\Junk" special-use attribute may be
    assigned to it.
 
@@ -330,12 +333,9 @@ Internet-Draft        Sieve: Special-Use Mailboxes          January 2018
 
 
 
-
-
-
-Bosch                     Expires July 11, 2018                 [Page 6]
+Bosch                    Expires August 9, 2018                 [Page 6]
 
-Internet-Draft        Sieve: Special-Use Mailboxes          January 2018
+Internet-Draft        Sieve: Special-Use Mailboxes         February 2018
 
 
       To: iana@iana.org
@@ -389,9 +389,9 @@ Internet-Draft        Sieve: Special-Use Mailboxes          January 2018
 
 
 
-Bosch                     Expires July 11, 2018                 [Page 7]
+Bosch                    Expires August 9, 2018                 [Page 7]
 
-Internet-Draft        Sieve: Special-Use Mailboxes          January 2018
+Internet-Draft        Sieve: Special-Use Mailboxes         February 2018
 
 
    [SPECIAL-USE]
@@ -445,4 +445,4 @@ Author's Address
 
 
 
-Bosch                     Expires July 11, 2018                 [Page 8]
+Bosch                    Expires August 9, 2018                 [Page 8]
