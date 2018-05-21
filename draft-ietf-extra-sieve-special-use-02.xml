@@ -203,22 +203,27 @@ mailbox named by its positional argument fails. This prevents the situation
 where messages are unexpectedly spread over two mailboxes in case transient or
 intermittent delivery failures occur.</t>
 
-<section title="Interaction with &quot;:create&quot; Argument to &quot;fileinto&quot; Command">
+<section title="Mailboxes Created Implicitly by the &quot;fileinto&quot; Command">
 
-<t>The <xref target="SIEVE-MAILBOX">"mailbox" extension</xref> adds the optional
-":create" argument to the "fileinto" command. If the optional ":create" argument
-is specified with "fileinto", it instructs the Sieve interpreter to create the
-specified mailbox if needed, before attempting to deliver the message into the
-specified mailbox.</t>
+<t>Before attempting to deliver the message into the specified mailbox, the
+"fileinto" command may implicitly create the mailbox if it does not exist (see
+Section 4.1 of <xref target="SIEVE">RFC5228</xref>). This optional behavior can
+be requested explicitly using the
+<xref target="SIEVE-MAILBOX">"mailbox" extension</xref>,
+which adds the optional ":create" argument to the "fileinto" command. If the
+":create" argument is specified with "fileinto", it instructs the Sieve
+interpreter to unconditionally create the specified mailbox if needed. Note that
+the ":create" argument has no effect when the implicit creation of mailboxes for
+delivery is the default behavior.</t>
 
-<t>When combined with the ":specialuse" argument, the ":create" argument
-instructs the Sieve interpreter to create the specified default mailbox if
-needed. This need arises when both the special-use and the default mailbox are
-not found.</t>
+<t>When the ":specialuse" argument is present, this behavior does not change:
+the Sieve interpreter will implicitly create the specified default mailbox if
+needed. This need arises when both the special-use mailbox and the default
+mailbox are not found.</t>
 
 <t>If the server implementation supports the
-<xref target="SPECIAL-USE">CREATE-SPECIAL-USE capability</xref> for IMAP, i.e.
-it allows assigning special-use flags to new mailboxes, it SHOULD assign the
+<xref target="SPECIAL-USE">CREATE-SPECIAL-USE capability</xref> for IMAP (i.e.,
+it allows assigning special-use flags to new mailboxes) it SHOULD assign the
 special-use flag specified with the ":specialuse" argument to the newly created
 mailbox.</t> 
 
@@ -237,7 +242,9 @@ capability string "special-use".
 <t>The following example saves the message in the mailbox where messages deemed
 to be junk mail are held. This mailbox is identified using the "\Junk"
 special-use attribute. If no mailbox has this attribute assigned, the message
-is filed into the mailbox named "Spam".</t>
+is filed into the mailbox named "Spam". If the mailbox named "Spam" does not
+exist either, the result of this Sieve script is implementation-dependent:
+e.g., it may trigger an error or the mailbox may be created implicitly.</t>
 
 <?rfc needLines="5" ?>
 <figure>
@@ -249,10 +256,10 @@ fileinto :specialuse "\\Junk" "Spam";
 ]]></artwork>
 </figure>
 
-<t>The following very similar example handles the case in which neither a
-"\Junk" special-use mailbox nor the "Spam" mailbox exist. In that case, a
-mailbox called "Spam" is created, and the message is stored there. Additionally,
-the "\Junk" special-use attribute may be assigned to it.
+<t>The following very similar example explicitly handles the case in which
+neither a "\Junk" special-use mailbox nor the "Spam" mailbox exist. In that
+case, a mailbox called "Spam" is created, and the message is stored
+there. Additionally, the "\Junk" special-use attribute may be assigned to it.
 </t>
 
 <?rfc needLines="6" ?>
