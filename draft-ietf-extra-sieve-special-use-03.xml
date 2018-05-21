@@ -98,6 +98,10 @@ document are to be interpreted as described in <xref target="KEYWORDS"/>.</t>
 <t>Conventions for notations are as in <xref target="SIEVE"/> Section 1.1,
 including use of the "Usage:" label for the definition of action and tagged
 arguments syntax.</t>
+<t>In <xref target="IMAP"/> examples, "C:" and "S:" indicate lines sent by the
+client and server respectively. If such lines are wrapped without a new "C:" or
+"S:" label, then the wrapping is for editorial clarity and is not part of the
+command.</t>
 </section>
 
 <section title="Test &quot;specialuse_exists&quot;">
@@ -137,6 +141,55 @@ to "deliver" messages into it, and</t>
 <xref target="SIEVE-MAILBOX">RFC 5490</xref> for a definition of when "delivery"
 of messages into a mailbox is deemed possible.</t>
 
+<section title="Equivalent IMAP Operations" anchor="special_use_exists_imap">
+
+<t>To clarify, a sequence of <xref target="IMAP"/> commands that a client
+could send to perform an assessment without Sieve that is equivalent to the
+"specialuse_exists" test is shown in the following IMAP protocol examples.</t>
+
+<t>First, the client queries which namespaces are available using the
+NAMESPACE command <xref target="NAMESPACE"/>:</t>
+<?rfc needLines="4" ?>
+<figure><artwork><![CDATA[
+C: A01 NAMESPACE
+S: * NAMESPACE (("INBOX/" "/")("Archive/" "/")) NIL (("Public/" "/"))
+S: A01 OK NAMESPACE command completed
+]]></artwork></figure>
+
+<t>Subsequently, when no particular mailbox is of interest (i.e., the
+"specialuse_exists" test has no mailbox argument), the client lists all
+mailboxes with special-use flags in the two returned personal namespaces
+(this extended LIST command requires the LIST-EXTENDED IMAP capability
+<xref target="LIST-EXTENDED"/>):</t>
+<?rfc needLines="8" ?>
+<figure><artwork><![CDATA[
+C: A02 LIST (SPECIAL-USE) "" ("INBOX/*" "Archive/*")
+    RETURN (SPECIAL-USE)
+S: * LIST (\Drafts) "/" INBOX/Drafts
+S: * LIST (\Trash) "/" INBOX/Trash
+S: * LIST (\Sent) "/" INBOX/Sent
+S: * LIST (\Archive) "/" Archive/Default
+S: A02 OK LIST command completed
+]]></artwork></figure>
+
+<t>Finally, using the MYRIGHTS command <xref target="IMAP-ACL"/>, the client
+determines the access rights it has for the mailbox or mailboxes that have all
+the requested flags assigned. This way, it can determine whether messages can be
+saved to any of those. In this example, an "\Archive" special-use mailbox is
+sought:</t>
+<?rfc needLines="4" ?>
+<figure><artwork><![CDATA[
+C: A03 MYRIGHTS Archive/Default
+S: * MYRIGHTS Archive/Default lrwsip
+S: A03 OK Myrights completed
+]]></artwork></figure>
+
+<t>The MYRIGHTS response indicates that the the user has "insert" rights
+<xref target="IMAP-ACL"/> for the "Archive/Default" mailbox,
+meaning that the client can deliver (APPEND) messages to that mailbox and that
+the Sieve "specialuse_exists" test would yield "true" in this case.</t>
+
+</section>
 </section>
 
 <section title="&quot;:specialuse&quot; Argument to &quot;fileinto&quot; Command">
@@ -229,6 +282,67 @@ mailbox are not found.</t>
 it allows assigning special-use flags to new mailboxes) it SHOULD assign the
 special-use flag specified with the ":specialuse" argument to the newly created
 mailbox.</t> 
+
+</section>
+
+<section title="Equivalent IMAP Operations">
+
+<t>To clarify, a sequence of <xref target="IMAP"/> commands that a client
+could send to perform an action without Sieve that is equivalent to the
+"fileinto" action with the ":specialuse" argument is shown in the following
+IMAP protocol examples. The following Sieve script is assumed:</t>
+
+<?rfc needLines="5" ?>
+<figure>
+<artwork><![CDATA[
+require "fileinto";
+require "special-use";
+
+fileinto :specialuse "\\Archive" "INBOX/Archive";
+]]></artwork>
+</figure>
+
+<t>First, the client proceeds as in <xref target="special_use_exists_imap"/> to
+find out whether the indicated special-use flag is assigned to any mailbox in
+the user's personal namespace. If a matching special-use mailbox is found, the
+message is delivered there using the IMAP APPEND command. If no matching
+special-use mailbox is found, the client attempts to deliver the message to the
+indicated default mailbox:</t>
+
+<?rfc needLines="3" ?>
+<figure><artwork><![CDATA[
+C: A04 APPEND INBOX/Archive {309}
+S: A04 NO [TRYCREATE] Mailbox does not exist: Archive/Personal
+]]></artwork></figure>
+
+<t>In this example, the default mailbox does not exist either. In that case,
+the client MAY create the default mailbox and assign the indicated special-use
+flag to it:
+</t>
+
+<?rfc needLines="13" ?>
+<figure><artwork><![CDATA[
+C: A05 CREATE INBOX/Archive (USE (\Archive))
+S: A05 OK Create completed
+]]></artwork></figure>
+
+<t>Finally, the client completes the delivery:</t>
+<?rfc needLines="14" ?>
+<figure><artwork><![CDATA[
+C: A06 APPEND INBOX/Archive {309}
+S: + OK
+C: Date: Wed, 18 Jul 2018 22:00:09 +0200
+C: From: mooch@owatagu.siam.edu
+C: To: Fred Foobar <foobar@Blurdybloop.com>
+C: Subject: afternoon meeting
+C: Message-Id: <Q234234-01012222@owatagu.siam.edu>
+C: MIME-Version: 1.0
+C: Content-Type: text/plain; charset=UTF-8
+C: 
+C: Hi Fred, do you think we can meet again at 3:30 tomorrow?
+C: 
+S: A06 OK [APPENDUID 1533375901 2312] Append completed.
+]]></artwork></figure>
 
 </section>
 </section>
@@ -475,6 +589,16 @@ which some descriptive text is borrowed in this document.</t>
     <seriesInfo name='DOI' value='10.17487/RFC3501'/>
   </reference>
 
+  <reference  anchor='IMAP-ACL' target='https://www.rfc-editor.org/info/rfc4314'>
+    <front>
+    <title>IMAP4 Access Control List (ACL) Extension</title>
+    <author initials='A.' surname='Melnikov' fullname='A. Melnikov'><organization /></author>
+    <date year='2005' month='December' />
+    </front>
+    <seriesInfo name='RFC' value='4314'/>
+    <seriesInfo name='DOI' value='10.17487/RFC4314'/>
+  </reference>
+
   <reference  anchor='IMAPSIEVE' target='http://www.rfc-editor.org/info/rfc6785'>
     <front>
     <title>Support for Internet Message Access Protocol (IMAP) Events in Sieve</title>
@@ -485,6 +609,16 @@ which some descriptive text is borrowed in this document.</t>
     <seriesInfo name='DOI' value='10.17487/RFC6785'/>
   </reference>
 
+  <reference  anchor='LIST-EXTENDED' target='https://www.rfc-editor.org/info/rfc5258'>
+    <front>
+    <title>Internet Message Access Protocol version 4 - LIST Command Extensions</title>
+    <author initials='B.' surname='Leiba' fullname='B. Leiba'><organization /></author>
+    <author initials='A.' surname='Melnikov' fullname='A. Melnikov'><organization /></author>
+    <date year='2008' month='June' />
+    </front>
+    <seriesInfo name='RFC' value='5258'/>
+    <seriesInfo name='DOI' value='10.17487/RFC5258'/>
+  </reference>
 </references>
 </back>
 
