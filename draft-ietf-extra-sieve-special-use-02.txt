@@ -70,14 +70,14 @@ Table of Contents
    3.  Test "specialuse_exists"  . . . . . . . . . . . . . . . . . .   3
    4.  ":specialuse" Argument to "fileinto" Command  . . . . . . . .   4
      4.1.  Mailboxes Created Implicitly by the "fileinto" Command  .   5
-   5.  Sieve Capability Strings  . . . . . . . . . . . . . . . . . .   5
+   5.  Sieve Capability Strings  . . . . . . . . . . . . . . . . . .   6
    6.  Examples  . . . . . . . . . . . . . . . . . . . . . . . . . .   6
    7.  Security Considerations . . . . . . . . . . . . . . . . . . .   7
    8.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   7
-   9.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .   7
+   9.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .   8
    10. References  . . . . . . . . . . . . . . . . . . . . . . . . .   8
      10.1.  Normative References . . . . . . . . . . . . . . . . . .   8
-     10.2.  Informative References . . . . . . . . . . . . . . . . .   8
+     10.2.  Informative References . . . . . . . . . . . . . . . . .   9
    Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .   9
 
 1.  Introduction
@@ -217,7 +217,7 @@ Internet-Draft        Sieve: Special-Use Mailboxes           August 2018
    this situation are described in Section 4.1 of RFC5228 [SIEVE].
 
    More than one mailbox in the user's personal namespace can have a
-   particular special-use flag assigned.  In case of such ambiguity, the
+   particular special-use flag assigned.  If one of those mailboxes is
 
 
 
@@ -226,13 +226,16 @@ Bosch                   Expires February 5, 2019                [Page 4]
 Internet-Draft        Sieve: Special-Use Mailboxes           August 2018
 
 
-   mailbox that is chosen for delivery is implementation-defined.
-   However, while the set of mailboxes to which the involved special-use
-   flags are assigned remains unchanged, implementations SHOULD ensure
-   that the mailbox choice is made consistently, so that the same
-   mailbox is used every time.  Conversely, the chosen mailbox MAY
-   change once the special-use flag assignments that are relevant for
-   the mailbox choice are changed (usually by user interaction).
+   in fact the default mailbox named by the positional string argument
+   of the "fileinto" command, that mailbox MUST be used for delivery.
+   If the default mailbox is not one of the options, the mailbox that is
+   chosen for delivery is implementation-defined.  However, while the
+   set of mailboxes to which the involved special-use flags are assigned
+   remains unchanged, implementations SHOULD ensure that the mailbox
+   choice is made consistently, so that the same mailbox is used every
+   time.  Conversely, the chosen mailbox MAY change once the special-use
+   flag assignments that are relevant for the mailbox choice are changed
+   (usually by user interaction).
 
    If delivery to the special-use mailbox fails for reasons not relating
    to its existence, the Sieve interpreter MUST NOT subsequently attempt
@@ -267,11 +270,8 @@ Internet-Draft        Sieve: Special-Use Mailboxes           August 2018
    specified with the ":specialuse" argument to the newly created
    mailbox.
 
-5.  Sieve Capability Strings
 
-   A Sieve implementation that defines the "specialuse_exists" test and
-   the ":specialuse" argument for the "fileinto" command will advertise
-   the capability string "special-use".
+
 
 
 
@@ -281,6 +281,12 @@ Bosch                   Expires February 5, 2019                [Page 5]
 
 Internet-Draft        Sieve: Special-Use Mailboxes           August 2018
 
+
+5.  Sieve Capability Strings
+
+   A Sieve implementation that defines the "specialuse_exists" test and
+   the ":specialuse" argument for the "fileinto" command will advertise
+   the capability string "special-use".
 
 6.  Examples
 
@@ -315,6 +321,23 @@ Internet-Draft        Sieve: Special-Use Mailboxes           August 2018
    processes junk mail, if those messages are copied or moved into a
    mailbox that has the "\Junk" special-use attribute assigned.
 
+
+
+
+
+
+
+
+
+
+
+
+
+Bosch                   Expires February 5, 2019                [Page 6]
+
+Internet-Draft        Sieve: Special-Use Mailboxes           August 2018
+
+
    require "imapsieve";
    require "special-use";
    require "environment";
@@ -329,14 +352,6 @@ Internet-Draft        Sieve: Special-Use Mailboxes           August 2018
        specialuse_exists "${mailbox}" "\\Junk") {
        redirect "spam-report@example.org";
    }
-
-
-
-
-Bosch                   Expires February 5, 2019                [Page 6]
-
-Internet-Draft        Sieve: Special-Use Mailboxes           August 2018
-
 
 7.  Security Considerations
 
@@ -364,6 +379,21 @@ Internet-Draft        Sieve: Special-Use Mailboxes           August 2018
    The following template specifies the IANA registration of the Sieve
    extension specified in this document:
 
+
+
+
+
+
+
+
+
+
+
+Bosch                   Expires February 5, 2019                [Page 7]
+
+Internet-Draft        Sieve: Special-Use Mailboxes           August 2018
+
+
       To: iana@iana.org
       Subject: Registration of new Sieve extension
 
@@ -384,15 +414,6 @@ Internet-Draft        Sieve: Special-Use Mailboxes           August 2018
 
    Thanks to Stan Kalisch, Barry Leiba, Alexey Melnikov, Ken Murchison,
    and Ned Freed for reviews and suggestions.
-
-
-
-
-
-Bosch                   Expires February 5, 2019                [Page 7]
-
-Internet-Draft        Sieve: Special-Use Mailboxes           August 2018
-
 
    Thanks to the authors of RFC5490 [SIEVE-MAILBOX] from which some
    descriptive text is borrowed in this document.
@@ -417,6 +438,17 @@ Internet-Draft        Sieve: Special-Use Mailboxes           August 2018
 
    [SIEVE]    Guenther, P. and T. Showalter, "Sieve: An Email Filtering
               Language", RFC 5228, January 2008.
+
+
+
+
+
+
+
+Bosch                   Expires February 5, 2019                [Page 8]
+
+Internet-Draft        Sieve: Special-Use Mailboxes           August 2018
+
 
    [SIEVE-MAILBOX]
               Melnikov, A., "The Sieve Mail-Filtering Language --
@@ -443,13 +475,6 @@ Internet-Draft        Sieve: Special-Use Mailboxes           August 2018
               (IMAP) Events in Sieve", RFC 6785, DOI 10.17487/RFC6785,
               November 2012, <http://www.rfc-editor.org/info/rfc6785>.
 
-
-
-Bosch                   Expires February 5, 2019                [Page 8]
-
-Internet-Draft        Sieve: Special-Use Mailboxes           August 2018
-
-
 Author's Address
 
    Stephan Bosch
@@ -459,31 +484,6 @@ Author's Address
    Finland
 
    Email: stephan.bosch@dovecot.fi
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

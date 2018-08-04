@@ -187,13 +187,16 @@ not exist. The various options for handling this situation are described in
 Section 4.1 of <xref target="SIEVE">RFC5228</xref>.</t>
 
 <t>More than one mailbox in the user's personal namespace can have a particular
-special-use flag assigned. In case of such ambiguity, the mailbox that is chosen
-for delivery is implementation-defined. However, while the set of mailboxes to
-which the involved special-use flags are assigned remains unchanged,
-implementations SHOULD ensure that the mailbox choice is made consistently, so
-that the same mailbox is used every time. Conversely, the chosen mailbox MAY
-change once the special-use flag assignments that are relevant for the mailbox
-choice are changed (usually by user interaction).</t>
+special-use flag assigned. If one of those mailboxes is in fact the default
+mailbox named by the positional string argument of the "fileinto" command, that
+mailbox MUST be used for delivery. If the default mailbox is not one of the
+options, the mailbox that is chosen for delivery is implementation-defined.
+However, while the set of mailboxes to which the involved special-use flags are
+assigned remains unchanged, implementations SHOULD ensure that the mailbox
+choice is made consistently, so that the same mailbox is used every time.
+Conversely, the chosen mailbox MAY change once the special-use flag assignments
+that are relevant for the mailbox choice are changed (usually by user
+interaction).</t>
 
 <t>If delivery to the special-use mailbox fails for reasons not relating to its
 existence, the Sieve interpreter MUST NOT subsequently attempt delivery in
