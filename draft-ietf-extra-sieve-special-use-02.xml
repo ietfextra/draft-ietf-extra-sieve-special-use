@@ -190,7 +190,7 @@ Section 4.1 of <xref target="SIEVE">RFC5228</xref>.</t>
 special-use flag assigned. In case of such ambiguity, the mailbox that is chosen
 for delivery is implementation-defined. However, while the set of mailboxes to
 which the involved special-use flags are assigned remains unchanged,
-implementations MUST ensure that the mailbox choice is made consistently, so
+implementations SHOULD ensure that the mailbox choice is made consistently, so
 that the same mailbox is used every time. Conversely, the chosen mailbox MAY
 change once the special-use flag assignments that are relevant for the mailbox
 choice are changed (usually by user interaction).</t>
