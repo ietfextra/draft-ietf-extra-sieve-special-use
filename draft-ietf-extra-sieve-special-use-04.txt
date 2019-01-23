@@ -4,8 +4,8 @@
 
 EXTRA                                                           S. Bosch
 Internet-Draft                                                Dovecot Oy
-Intended status: Standards Track                       November 27, 2018
-Expires: May 31, 2019
+Intended status: Standards Track                        January 23, 2019
+Expires: July 27, 2019
 
 
        Sieve Email Filtering: Delivering to Special-Use Mailboxes
@@ -38,11 +38,11 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on May 31, 2019.
+   This Internet-Draft will expire on July 27, 2019.
 
 Copyright Notice
 
-   Copyright (c) 2018 IETF Trust and the persons identified as the
+   Copyright (c) 2019 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Bosch                     Expires May 31, 2019                  [Page 1]
+Bosch                     Expires July 27, 2019                 [Page 1]
 
-Internet-Draft        Sieve: Special-Use Mailboxes         November 2018
+Internet-Draft        Sieve: Special-Use Mailboxes          January 2019
 
 
    to this document.  Code Components extracted from this document must
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Bosch                     Expires May 31, 2019                  [Page 2]
+Bosch                     Expires July 27, 2019                 [Page 2]
 
-Internet-Draft        Sieve: Special-Use Mailboxes         November 2018
+Internet-Draft        Sieve: Special-Use Mailboxes          January 2019
 
 
    IMAP METADATA capability, just to provide access to special-use
@@ -129,8 +129,10 @@ Internet-Draft        Sieve: Special-Use Mailboxes         November 2018
 2.  Conventions Used in This Document
 
    The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-   "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
-   document are to be interpreted as described in [KEYWORDS].
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
+   "OPTIONAL" in this document are to be interpreted as described in
+   BCP 14 [KEYWORDS] [KEYWORDS-UPD] when, and only when, they appear in
+   all capitals, as shown here.
 
    Conventions for notations are as in [SIEVE] Section 1.1, including
    use of the "Usage:" label for the definition of action and tagged
@@ -160,15 +162,15 @@ Internet-Draft        Sieve: Special-Use Mailboxes         November 2018
    If the "mailbox" argument is specified, the "specialuse_exists" test
    yields true if all of the following statements are true:
 
-   a.  the indicated mailbox exists,
 
 
 
-
-Bosch                     Expires May 31, 2019                  [Page 3]
+Bosch                     Expires July 27, 2019                 [Page 3]
 
-Internet-Draft        Sieve: Special-Use Mailboxes         November 2018
+Internet-Draft        Sieve: Special-Use Mailboxes          January 2019
 
+
+   a.  the indicated mailbox exists,
 
    b.  that mailbox allows the user in whose context the Sieve script
        runs to "deliver" messages into it, and
@@ -214,17 +216,19 @@ Internet-Draft        Sieve: Special-Use Mailboxes         November 2018
    messages can be saved to any of those.  In this example, an
    "\Archive" special-use mailbox is sought:
 
+
+
+
+
+
+Bosch                     Expires July 27, 2019                 [Page 4]
+
+Internet-Draft        Sieve: Special-Use Mailboxes          January 2019
+
+
    C: A03 MYRIGHTS Archive/Default
    S: * MYRIGHTS Archive/Default lrwsip
    S: A03 OK Myrights completed
-
-
-
-
-Bosch                     Expires May 31, 2019                  [Page 4]
-
-Internet-Draft        Sieve: Special-Use Mailboxes         November 2018
-
 
    The MYRIGHTS response indicates that the the user has "insert" rights
    [IMAP-ACL] for the "Archive/Default" mailbox, meaning that the client
@@ -270,17 +274,16 @@ Internet-Draft        Sieve: Special-Use Mailboxes         November 2018
    If neither the special-use mailbox nor the default mailbox exists,
    the "fileinto" action MUST proceed exactly as it does in case the
    ":specialuse" is argument is absent and the mailbox named by its
+
+
+
+Bosch                     Expires July 27, 2019                 [Page 5]
+
+Internet-Draft        Sieve: Special-Use Mailboxes          January 2019
+
+
    positional argument does not exist.  The various options for handling
    this situation are described in Section 4.1 of RFC5228 [SIEVE].
-
-
-
-
-
-Bosch                     Expires May 31, 2019                  [Page 5]
-
-Internet-Draft        Sieve: Special-Use Mailboxes         November 2018
-
 
    More than one mailbox in the user's personal namespace can have a
    particular special-use flag assigned.  If one of those mailboxes is
@@ -330,12 +333,9 @@ Internet-Draft        Sieve: Special-Use Mailboxes         November 2018
 
 
 
-
-
-
-Bosch                     Expires May 31, 2019                  [Page 6]
+Bosch                     Expires July 27, 2019                 [Page 6]
 
-Internet-Draft        Sieve: Special-Use Mailboxes         November 2018
+Internet-Draft        Sieve: Special-Use Mailboxes          January 2019
 
 
 4.2.  Equivalent IMAP Operations
@@ -389,9 +389,9 @@ Internet-Draft        Sieve: Special-Use Mailboxes         November 2018
 
 
 
-Bosch                     Expires May 31, 2019                  [Page 7]
+Bosch                     Expires July 27, 2019                 [Page 7]
 
-Internet-Draft        Sieve: Special-Use Mailboxes         November 2018
+Internet-Draft        Sieve: Special-Use Mailboxes          January 2019
 
 
 5.  Sieve Capability Strings
@@ -445,9 +445,9 @@ Internet-Draft        Sieve: Special-Use Mailboxes         November 2018
 
 
 
-Bosch                     Expires May 31, 2019                  [Page 8]
+Bosch                     Expires July 27, 2019                 [Page 8]
 
-Internet-Draft        Sieve: Special-Use Mailboxes         November 2018
+Internet-Draft        Sieve: Special-Use Mailboxes          January 2019
 
 
    require "imapsieve";
@@ -501,9 +501,9 @@ Internet-Draft        Sieve: Special-Use Mailboxes         November 2018
 
 
 
-Bosch                     Expires May 31, 2019                  [Page 9]
+Bosch                     Expires July 27, 2019                 [Page 9]
 
-Internet-Draft        Sieve: Special-Use Mailboxes         November 2018
+Internet-Draft        Sieve: Special-Use Mailboxes          January 2019
 
 
       To: iana@iana.org
@@ -543,24 +543,27 @@ Internet-Draft        Sieve: Special-Use Mailboxes         November 2018
               Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119, March 1997.
 
+   [KEYWORDS-UPD]
+              Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
+              2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
+              May 2017, <https://www.rfc-editor.org/info/rfc8174>.
+
    [NAMESPACE]
               Gahrns, M. and C. Newman, "IMAP4 Namespace", RFC 2342,
               DOI 10.17487/RFC2342, May 1998, <https://www.rfc-
               editor.org/info/rfc2342>.
 
+
+
+
+
+Bosch                     Expires July 27, 2019                [Page 10]
+
+Internet-Draft        Sieve: Special-Use Mailboxes          January 2019
+
+
    [SIEVE]    Guenther, P. and T. Showalter, "Sieve: An Email Filtering
               Language", RFC 5228, January 2008.
-
-
-
-
-
-
-
-Bosch                     Expires May 31, 2019                 [Page 10]
-
-Internet-Draft        Sieve: Special-Use Mailboxes         November 2018
-
 
    [SIEVE-MAILBOX]
               Melnikov, A., "The Sieve Mail-Filtering Language --
@@ -610,7 +613,4 @@ Author's Address
 
 
 
-
-
-
-Bosch                     Expires May 31, 2019                 [Page 11]
+Bosch                     Expires July 27, 2019                [Page 11]
