@@ -57,15 +57,15 @@ special-use attribute assigned.</t>
 
 <section title="Introduction">
 <t>Commonly, several mailboxes in an
-<xref target="IMAP">IMAP message store</xref> have a special use; e.g.
-it is where the user's draft messages are stored, where a copy of sent messages
-are kept, or it is where spam messages are filed automatically at delivery. The
-<xref target="SPECIAL-USE">SPECIAL-USE capability</xref> of the IMAP protocol
-defines mailbox attributes that identify these special mailboxes explicitly to
-the client. This way, client configuration is simplified significantly. Using
-the <xref target="SPECIAL-USE">CREATE-SPECIAL-USE capability</xref>, IMAP
-clients can also configure these attributes dynamically based on user
-preference.</t>
+<xref target="IMAP">IMAP message store</xref> have a special use. For example,
+there can be a special-use mailbox for storing the user's draft messages, for
+keeping copies of sent messages, and for collecting spam messages that were
+classified as such at delivery. The <xref target="SPECIAL-USE">SPECIAL-USE
+capability</xref> of the IMAP protocol defines mailbox attributes that identify
+these special mailboxes explicitly to the client. This way, client configuration
+is simplified significantly. Using the
+<xref target="SPECIAL-USE">CREATE-SPECIAL-USE capability</xref>, IMAP clients
+can also configure these attributes dynamically based on user preference.</t>
 
 <t>Unlike the IMAP protocol, the Sieve mail filtering language
 <xref target="SIEVE"/> currently cannot freely access these special-use
