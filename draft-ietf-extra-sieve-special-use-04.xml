@@ -227,8 +227,8 @@ to it.</t>
 </list>
 </t>
 
-<t>The special-use flag specified with the ":specialuse" argument MUST conform
-to the "use-attr" syntax described in Section 6 of
+<t>The special-use flag specified with the ':specialuse' argument conforms to
+the 'use-attr' syntax described in Section 6 of
 <xref target="SIEVE-MAILBOX">RFC6154</xref>. Implementations SHOULD handle an
 invalid special-use flag in the same way as an invalid mailbox name is handled.
 The string parameter of the ":specialuse" argument is not a constant string,

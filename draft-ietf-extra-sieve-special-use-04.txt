@@ -4,8 +4,8 @@
 
 EXTRA                                                           S. Bosch
 Internet-Draft                                                Dovecot Oy
-Intended status: Standards Track                        January 23, 2019
-Expires: July 27, 2019
+Intended status: Standards Track                        January 24, 2019
+Expires: July 28, 2019
 
 
        Sieve Email Filtering: Delivering to Special-Use Mailboxes
@@ -38,7 +38,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on July 27, 2019.
+   This Internet-Draft will expire on July 28, 2019.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Bosch                     Expires July 27, 2019                 [Page 1]
+Bosch                     Expires July 28, 2019                 [Page 1]
 
 Internet-Draft        Sieve: Special-Use Mailboxes          January 2019
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Bosch                     Expires July 27, 2019                 [Page 2]
+Bosch                     Expires July 28, 2019                 [Page 2]
 
 Internet-Draft        Sieve: Special-Use Mailboxes          January 2019
 
@@ -165,7 +165,7 @@ Internet-Draft        Sieve: Special-Use Mailboxes          January 2019
 
 
 
-Bosch                     Expires July 27, 2019                 [Page 3]
+Bosch                     Expires July 28, 2019                 [Page 3]
 
 Internet-Draft        Sieve: Special-Use Mailboxes          January 2019
 
@@ -221,7 +221,7 @@ Internet-Draft        Sieve: Special-Use Mailboxes          January 2019
 
 
 
-Bosch                     Expires July 27, 2019                 [Page 4]
+Bosch                     Expires July 28, 2019                 [Page 4]
 
 Internet-Draft        Sieve: Special-Use Mailboxes          January 2019
 
@@ -262,8 +262,8 @@ Internet-Draft        Sieve: Special-Use Mailboxes          January 2019
       "fileinto" command, which is used when the special-use mailbox is
       not found.
 
-   The special-use flag specified with the ":specialuse" argument MUST
-   conform to the "use-attr" syntax described in Section 6 of RFC6154
+   The special-use flag specified with the ':specialuse' argument
+   conforms to the 'use-attr' syntax described in Section 6 of RFC6154
    [SIEVE-MAILBOX].  Implementations SHOULD handle an invalid special-
    use flag in the same way as an invalid mailbox name is handled.  The
    string parameter of the ":specialuse" argument is not a constant
@@ -277,7 +277,7 @@ Internet-Draft        Sieve: Special-Use Mailboxes          January 2019
 
 
 
-Bosch                     Expires July 27, 2019                 [Page 5]
+Bosch                     Expires July 28, 2019                 [Page 5]
 
 Internet-Draft        Sieve: Special-Use Mailboxes          January 2019
 
@@ -333,7 +333,7 @@ Internet-Draft        Sieve: Special-Use Mailboxes          January 2019
 
 
 
-Bosch                     Expires July 27, 2019                 [Page 6]
+Bosch                     Expires July 28, 2019                 [Page 6]
 
 Internet-Draft        Sieve: Special-Use Mailboxes          January 2019
 
@@ -389,7 +389,7 @@ Internet-Draft        Sieve: Special-Use Mailboxes          January 2019
 
 
 
-Bosch                     Expires July 27, 2019                 [Page 7]
+Bosch                     Expires July 28, 2019                 [Page 7]
 
 Internet-Draft        Sieve: Special-Use Mailboxes          January 2019
 
@@ -445,7 +445,7 @@ Internet-Draft        Sieve: Special-Use Mailboxes          January 2019
 
 
 
-Bosch                     Expires July 27, 2019                 [Page 8]
+Bosch                     Expires July 28, 2019                 [Page 8]
 
 Internet-Draft        Sieve: Special-Use Mailboxes          January 2019
 
@@ -501,7 +501,7 @@ Internet-Draft        Sieve: Special-Use Mailboxes          January 2019
 
 
 
-Bosch                     Expires July 27, 2019                 [Page 9]
+Bosch                     Expires July 28, 2019                 [Page 9]
 
 Internet-Draft        Sieve: Special-Use Mailboxes          January 2019
 
@@ -557,7 +557,7 @@ Internet-Draft        Sieve: Special-Use Mailboxes          January 2019
 
 
 
-Bosch                     Expires July 27, 2019                [Page 10]
+Bosch                     Expires July 28, 2019                [Page 10]
 
 Internet-Draft        Sieve: Special-Use Mailboxes          January 2019
 
@@ -613,4 +613,4 @@ Author's Address
 
 
 
-Bosch                     Expires July 27, 2019                [Page 11]
+Bosch                     Expires July 28, 2019                [Page 11]
