@@ -335,10 +335,10 @@ S: A05 OK Create completed
 C: A06 APPEND INBOX/Archive {309}
 S: + OK
 C: Date: Wed, 18 Jul 2018 22:00:09 +0200
-C: From: mooch@owatagu.siam.edu
-C: To: Fred Foobar <foobar@Blurdybloop.com>
+C: From: mooch@owatagu.siam.example
+C: To: Fred Foobar <foobar@Blurdybloop.example>
 C: Subject: afternoon meeting
-C: Message-Id: <Q234234-01012222@owatagu.siam.edu>
+C: Message-Id: <Q234234-01012222@owatagu.siam.example>
 C: MIME-Version: 1.0
 C: Content-Type: text/plain; charset=UTF-8
 C: 
