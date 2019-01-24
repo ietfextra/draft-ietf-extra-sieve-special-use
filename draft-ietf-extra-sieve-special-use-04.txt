@@ -3,7 +3,7 @@
 
 
 EXTRA                                                           S. Bosch
-Internet-Draft                                                Dovecot Oy
+Internet-Draft                                           Open Xchange Oy
 Intended status: Standards Track                        January 24, 2019
 Expires: July 28, 2019
 
@@ -604,12 +604,12 @@ Internet-Draft        Sieve: Special-Use Mailboxes          January 2019
 Author's Address
 
    Stephan Bosch
-   Dovecot Oy
-   Lars Sonckin Kaari 12
+   Open Xchange Oy
+   Lars Sonckin kaari 12
    Espoo  02600
    Finland
 
-   Email: stephan.bosch@dovecot.fi
+   Email: stephan.bosch@open-xchange.com
 
 
 

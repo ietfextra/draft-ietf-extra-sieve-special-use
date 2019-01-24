@@ -21,15 +21,15 @@ Sieve Email Filtering: Delivering to Special-Use Mailboxes
 </title>
 
 <author fullname="Stephan Bosch" initials="S." surname="Bosch">
-	<organization>Dovecot Oy</organization>
+  <organization>Open Xchange Oy</organization>
   <address>
     <postal>
-			<street>Lars Sonckin Kaari 12</street>
-			<code>02600</code>
-			<city>Espoo</city>
-			<country>Finland</country>
+      <street>Lars Sonckin kaari 12</street>
+      <code>02600</code>
+      <city>Espoo</city>
+      <country>Finland</country>
     </postal>
-    <email>stephan.bosch@dovecot.fi</email>
+    <email>stephan.bosch@open-xchange.com</email>
   </address>
 </author>
 
