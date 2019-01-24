@@ -317,7 +317,7 @@ indicated default mailbox:</t>
 <?rfc needLines="3" ?>
 <figure><artwork><![CDATA[
 C: A04 APPEND INBOX/Archive {309}
-S: A04 NO [TRYCREATE] Mailbox does not exist: Archive/Personal
+S: A04 NO [TRYCREATE] Mailbox does not exist: INBOX/Archive
 ]]></artwork></figure>
 
 <t>In this example, the default mailbox does not exist either. In that case,
